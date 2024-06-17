@@ -2,61 +2,65 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-class Book {
-    private String bookID;
-    private String title;
-    private String author;
-    private String genre;
-    private int publicationYear;
-    private boolean available;
-    private static ArrayList<Book> inventory = new ArrayList<>();
+// class Book {
+//     private String bookID;
+//     private String title;
+//     private String author;
+//     private String genre;
+//     private int publicationYear;
+//     private boolean available;
+//     private static ArrayList<Book> inventory = new ArrayList<>();
 
-    public Book(String bookID, String title, String author, String genre, int publicationYear) {
-        this.bookID = bookID;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-        this.publicationYear = publicationYear;
-        this.available = true;
-        inventory.add(this);
-    }
+//     public Book(String bookID, String title, String author, String genre, int publicationYear) {
+//         this.bookID = bookID;
+//         this.title = title;
+//         this.author = author;
+//         this.genre = genre;
+//         this.publicationYear = publicationYear;
+//         this.available = true;
+//         inventory.add(this);
+//     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
+//     public void setAvailable(boolean available) {
+//         this.available = available;
+//     }
 
-    public String getBookID() {
-        return bookID;
-    }
+//     public String getBookID() {
+//         return bookID;
+//     }
 
-    public String getTitle() {
-        return title;
-    }
+//     public String getTitle() {
+//         return title;
+//     }
 
-    public String getAuthor() {
-        return author;
-    }
+//     public String getAuthor() {
+//         return author;
+//     }
 
-    public String getGenre() {
-        return genre;
-    }
+//     public String getGenre() {
+//         return genre;
+//     }
 
-    public int getPublicationYear() {
-        return publicationYear;
-    }
+//     public int getPublicationYear() {
+//         return publicationYear;
+//     }
 
-    public boolean isAvailable() {
-        return available;
-    }
+//     public boolean isAvailable() {
+//         return available;
+//     }
 
-    public void setBorrowed(boolean borrowed) {
-        this.available = !borrowed;
-    }
+//     public void setBorrowed(boolean borrowed) {
+//         this.available = !borrowed;
+//     }
 
-    public static ArrayList<Book> getInventory() {
-        return inventory;
-    }
-}
+//     public static ArrayList<Book> getInventory() {
+//         return inventory;
+//     }
+
+//     public void setGenre(String genre) {
+//         this.genre = genre;
+//     }
+// }
 
 class User {
     protected String name;

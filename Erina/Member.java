@@ -1,3 +1,6 @@
+import java.util.*;
+import javax.swing.JOptionPane;
+
 public class Member extends User {
     private ArrayList<BorrowRecord> borrowList;
     private ArrayList<ReservationQueue> reserveList;
