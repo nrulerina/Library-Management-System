@@ -1,0 +1,2 @@
+Java Programming|John Doe|1234567890|Some Publisher|2023-01-01|5|TECHNOLOGY
+Python Basics|Jane Smith|0987654321|Another Publisher|2022-12-15|3|TECHNOLOGY

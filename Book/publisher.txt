@@ -1,0 +1,10 @@
+Penguin Books, New York, info@penguinbooks.com
+HarperCollins Publishers, London, info@harpercollins.com
+Random House, New York, info@randomhouse.com
+Simon & Schuster, New York, info@simonandschuster.com
+Macmillan Publishers, London, info@macmillanpublishers.com
+Hachette Livre, Paris, info@hachette.com
+Scholastic Corporation, New York, info@scholastic.com
+Pearson Education, London, info@pearson.com
+Oxford University Press, Oxford, info@oup.com
+Cambridge University Press, Cambridge, info@cambridge.org
