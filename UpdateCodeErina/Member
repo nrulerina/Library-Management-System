@@ -1,0 +1,150 @@
+// Member class
+class Member extends User {
+    private ArrayList<BorrowRecord> borrowList;
+    private ArrayList<ReservationRecord> reserveList;
+    private static ArrayList<Member> members = new ArrayList<>();
+    private LibraryCard libraryCard;
+    
+
+    public Member(String name, String email, String address, String phoneNumber, String memberID, String username, String password, Date dateOfBirth) {
+        super(name, email, address, phoneNumber, memberID, username, password, dateOfBirth);
+        this.borrowList = new ArrayList<>();
+        this.reserveList = new ArrayList<>();
+        this.libraryCard = new LibraryCard(this, new Date(), new Date());
+        members.add(this);
+    }
+
+
+    public void viewLibraryCard() {
+        JOptionPane.showMessageDialog(null, libraryCard.getFormattedDetails(), "Library Card", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public boolean login(String username, String password) {
+        return this.username.equals(username) && this.password.equals(password);
+    }
+
+    public void reviewBook(String bookID, int rating, String comment) {
+        boolean found = false;
+        for (Book book : Book.getInventory()) {
+            if (book.getBookID().equals(bookID)) {
+                Review.addReview(this, book, rating, comment);
+                JOptionPane.showMessageDialog(null, "Review added successfully.");
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(null, "Book not found in the inventory.");
+        }
+    }
+
+    public void borrowBook(Book book) {
+        if (book.isAvailable()) {
+            BorrowRecord borrowRecord = new BorrowRecord(this, book, ZonedDateTime.now(), null);
+            borrowList.add(borrowRecord);
+            book.setAvailable(false);
+            JOptionPane.showMessageDialog(null, "Book borrowed successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Book is not available.");
+        }
+    }
+
+    public void returnBook(String bookID) {
+        for (BorrowRecord borrowRecord : new ArrayList<>(borrowList)) {
+            if (borrowRecord.getBook().getBookID().equals(bookID)) {
+                borrowList.remove(borrowRecord);
+                borrowRecord.getBook().setAvailable(true);
+                JOptionPane.showMessageDialog(null, "Book returned successfully.");
+                break;
+            }
+        }
+    }
+    public void showMenu() {
+        while (true) {
+            String[] options = {"Borrow Book", "Return Book", "View Borrowed Books", "View Reservation Queue", "Review Book", "View Library Card", "Show List of Books", "Logout"};
+            int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    
+            switch (choice) {
+                case 0: // Borrow Book
+                    String bookID = JOptionPane.showInputDialog("Enter book ID to borrow:");
+                    for (Book book : Book.getInventory()) {
+                        if (book.getBookID().equals(bookID)) {
+                            borrowBook(book);
+                            break;
+                        }
+                    }
+                    break;
+                case 1: // Return Book
+                    bookID = JOptionPane.showInputDialog("Enter book ID to return:");
+                    returnBook(bookID);
+                    break;
+                case 2: // View Borrowed Books
+                    showBorrowedBooks();
+                    break;
+                case 3: // View Reservation Queue
+                    showReservationQueue();
+                    break;
+                    case 4: // Review Book
+                    bookID = JOptionPane.showInputDialog("Enter book ID to review:");
+                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                    String comment = JOptionPane.showInputDialog("Enter comment:");
+                    reviewBook(bookID, rating, comment);
+                    break;
+                case 5: // View Library Card
+                    viewLibraryCard();
+                    break;
+                case 6: // Show List of Books
+                    showListOfBooks();
+                    break;
+                case 7: // Logout
+                    JOptionPane.showMessageDialog(null, "Logged out successfully.");
+                    return; // Exit the showMenu() method and effectively end the program
+            }
+        }
+    }
+    
+
+    public void showBorrowedBooks() {
+        StringBuilder borrowedBooks = new StringBuilder("Borrowed Books:\n");
+        for (BorrowRecord record : borrowList) {
+            borrowedBooks.append(record.getBook().getTitle()).append(" (").append(record.getBook().getBookID()).append(")\n");
+        }
+        JOptionPane.showMessageDialog(null, borrowedBooks.toString(), "Borrowed Books", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showReservationQueue() {
+        StringBuilder reservationQueue = new StringBuilder("Reservation Queue:\n");
+        for (ReservationRecord queue : reserveList) {
+            reservationQueue.append(queue.getBook().getTitle()).append(" (").append(queue.getBook().getBookID()).append(")\n");
+        }
+        JOptionPane.showMessageDialog(null, reservationQueue.toString(), "Reservation Queue", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showListOfBooks() {
+        StringBuilder bookList = new StringBuilder("Books in Library:\n");
+        for (Book book : Book.getInventory()) {
+            bookList.append(book.getTitle()).append(" (").append(book.getBookID()).append(")\n");
+        }
+        JOptionPane.showMessageDialog(null, bookList.toString(), "List of Books", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static Member registerMember() {
+        String name = JOptionPane.showInputDialog("Enter name:");
+        String email = JOptionPane.showInputDialog("Enter email:");
+        String address = JOptionPane.showInputDialog("Enter address:");
+        String phoneNumber = JOptionPane.showInputDialog("Enter phone number:");
+        String memberID = UUID.randomUUID().toString();
+        String username = JOptionPane.showInputDialog("Enter username:");
+        String password = JOptionPane.showInputDialog("Enter password:");
+        Date dateOfBirth = new Date();
+
+        Member member = new Member(name, email, address, phoneNumber, memberID, username, password, dateOfBirth);
+        JOptionPane.showMessageDialog(null, "Member registered successfully.");
+        return member;
+    }
+
+    public static ArrayList<Member> getMembers() {
+        return members;
+    }
+}
