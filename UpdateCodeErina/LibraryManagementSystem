@@ -1,0 +1,66 @@
+
+public class LibraryManagementSystem {
+    public static void main(String[] args) {
+        // Predefined admin for demonstration
+        Admin admin = new Admin("Admin", "admin@library.com", "123 Admin Street", "1234567890", UUID.randomUUID().toString(), "admin", "admin123", new Date());
+
+        // Predefined members for demonstration
+        Member member1 = new Member("John Doe", "john@example.com", "123 Main St", "555-1234", UUID.randomUUID().toString(), "john_doe", "password123", new GregorianCalendar(1990, Calendar.JANUARY, 1).getTime());
+        Member member2 = new Member("Jane Smith", "jane@example.com", "456 Elm St", "555-5678", UUID.randomUUID().toString(), "jane_smith", "password456", new GregorianCalendar(1992, Calendar.FEBRUARY, 2).getTime());
+
+        while (true) {
+            String[] options = {"Login as Member", "Login as Admin", "Exit"};
+            int choice = JOptionPane.showOptionDialog(null, "Library Management System", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+            switch (choice) {
+                case 0:
+                    loginAsMember();
+                    break;
+                case 1:
+                    loginAsAdmin();
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Exiting system.");
+                    System.exit(0);
+            }
+        }
+    }
+
+    private static void loginAsMember() {
+        String username = JOptionPane.showInputDialog("Enter username:");
+        String password = JOptionPane.showInputDialog("Enter password:");
+        boolean loginSuccessful = false;
+
+        for (Member member : Member.getMembers()) {
+            if (member.login(username, password)) {
+                JOptionPane.showMessageDialog(null, "Login successful.");
+                member.showMenu();
+                loginSuccessful = true;
+                break;
+            }
+        }
+
+        if (!loginSuccessful) {
+            JOptionPane.showMessageDialog(null, "Invalid username or password.");
+        }
+    }
+
+    private static void loginAsAdmin() {
+        String username = JOptionPane.showInputDialog("Enter admin username:");
+        String password = JOptionPane.showInputDialog("Enter admin password:");
+        boolean loginSuccessful = false;
+
+        for (Admin admin : Admin.getAdmins()) {
+            if (admin.login(username, password)) {
+                JOptionPane.showMessageDialog(null, "Login successful.");
+                admin.showMenu();
+                loginSuccessful = true;
+                break;
+            }
+        }
+
+        if (!loginSuccessful) {
+            JOptionPane.showMessageDialog(null, "Invalid admin username or password.");
+        }
+    }
+}
