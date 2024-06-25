@@ -1,2 +1,4 @@
 admin, John Doe, john.doe@example.com, 123 Main St, New York, 1234567890, admin001, password123, 2023-06-25, ADM001
 member, Jane Smith, jane.smith@example.com, 456 Elm St, Los Angeles, 0987654321, member001, password456, 2023-06-25, MEM001
+member, Michael Johnson, michael.johnson@example.com, 789 Oak Ave, Chicago, 9876543210, member002, pass789word, 2023-06-26, MEM002
+member, Sarah Brown, sarah.brown@example.com, 321 Pine Rd, San Francisco, 8765432109, member003, pwd987abc, 2023-06-27, MEM003

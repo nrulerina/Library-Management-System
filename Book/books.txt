@@ -1,2 +1,31 @@
-Java Programming|John Doe|1234567890|Some Publisher|2023-01-01|5|TECHNOLOGY
-Python Basics|Jane Smith|0987654321|Another Publisher|2022-12-15|3|TECHNOLOGY
+Title: The Great Gatsby
+Author: F. Scott Fitzgerald
+ISBN: 9780743273565
+Publisher: Scribner
+Published Date: 1925-04-10
+Copies Available: 5
+Genre: Classic
+
+Title: To Kill a Mockingbird
+Author: Harper Lee
+ISBN: 9780061120084
+Publisher: Harper Perennial Modern Classics
+Published Date: 1960-07-11
+Copies Available: 3
+Genre: Fiction
+
+Title: Pride and Prejudice
+Author: Jane Austen
+ISBN: 9780486284736
+Publisher: Dover Publications
+Published Date: 1813-01-28
+Copies Available: 7
+Genre: Romance
+Title: Juara
+Author: BAru
+ISBN: 11645
+Publisher: Juara
+Published Date: 2024-06-25
+Copies Available: 3
+Genre: Kuala
+

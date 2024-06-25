@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 public class Admin extends User {
     private String adminID;
     private ArrayList<Announcement> announcements;
@@ -15,6 +17,8 @@ public class Admin extends User {
     public String getAdminID() {
         return adminID;
     }
+
+    
 
     public void setAdminID(String adminID) {
         this.adminID = adminID;
@@ -38,20 +42,19 @@ public class Admin extends User {
         return super.login(username, password);
     }
 
-    public void showListOfBooks() {
-        // Implement logic to show list of books
-        Library library = new Library("My Library", "123 Main St, City"); // Example instantiation
-        ArrayList<Book> books = library.getBooks(); // Assuming getBooks() returns the list of books
-
+     public void showListOfBooks() {
+        ArrayList<Book> books = Library.getInstance("My Library", "123 Main St, City").getBooks();
         if (books.isEmpty()) {
-            System.out.println("No books available.");
+            JOptionPane.showMessageDialog(null, "No books available.");
         } else {
-            System.out.println("List of Books:");
+            StringBuilder message = new StringBuilder("List of Books:\n");
             for (Book book : books) {
-                System.out.println(book); // Assuming Book class overrides toString() method
+                message.append("- ").append(book.getTitle()).append("\n");
             }
+            JOptionPane.showMessageDialog(null, message.toString());
         }
     }
+    
 
     public void showListOfMembers() {
         // Implement logic to show list of members

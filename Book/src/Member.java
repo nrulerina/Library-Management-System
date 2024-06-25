@@ -5,8 +5,8 @@ public class Member extends User {
     private Date registrationDate;
 
     public Member(String name, String email, String address, String phoneNumber, String memberID,
-                  String username, String password, Date dateOfBirth, Date registrationDate) {
-                    super(name, email, address, phoneNumber,memberID, username, password, dateOfBirth);
+                  String username, String password, Date registrationDate,String userID) {
+                    super(name, email, address, phoneNumber,memberID, username, password, registrationDate);
 
         this.memberID = memberID;
         this.registrationDate = registrationDate;

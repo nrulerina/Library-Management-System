@@ -3,7 +3,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class Library {
@@ -25,6 +27,8 @@ public class Library {
         this.genres = new ArrayList<>();
         this.publishers = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.members = new ArrayList<>();
+
 
     }
 
@@ -32,14 +36,60 @@ public class Library {
         return members;
     }
 
+    
+    public static Library getInstance(String name, String address) {
+        if (instance == null) {
+            instance = new Library(name, address);
+        }
+        return instance;
+    }
     // Add User
     public void addUser(User user) {
         users.add(user);
     }
+    public ArrayList<Book> getBooks() {
+        return books; // Assuming 'books' is your list of all books in the library
+    }
+    
+    
+    
+
+    // public List<Book> getAvailableBooks() {
+    //     List<Book> availableBooks = new ArrayList<>();
+    //     for (Book book : books) {
+    //         if (book.isAvailable()) { // Implement isAvailable() method in Book class as needed
+    //             availableBooks.add(book);
+    //         }
+    //     }
+    //     return availableBooks;
+    // }
+
+
 
     // Add Genre
     public void addGenre(Genre genre) {
         genres.add(genre);
+    }
+
+    public void showListOfMembers() {
+        if (members.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No members available.");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (User user : members) {
+                if (user instanceof Member) {
+                    Member member = (Member) user;
+                    sb.append("Name: ").append(member.getName()).append("\n")
+                      .append("Email: ").append(member.getEmail()).append("\n")
+                      .append("Address: ").append(member.getAddress()).append("\n")
+                      .append("Phone Number: ").append(member.getPhoneNumber()).append("\n")
+                      .append("Member ID: ").append(member.getMemberID()).append("\n")
+                      .append("Username: ").append(member.getUsername()).append("\n")
+                      .append("Registration Date: ").append(member.getRegistrationDate()).append("\n\n");
+                }
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "List of Members", JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
     // Remove Genre
@@ -95,17 +145,50 @@ public class Library {
         return genreNames;
     }
 
-    // Add Book
-    public void addBook(Admin admin, String title, String author, String isbn, Publisher publisher, Date publishedDate, int copiesAvailable, Genre genre) {
-        if (admin != null) {
-            Book newBook = new Book(title, author, isbn, publisher, publishedDate, copiesAvailable, genre);
-            books.add(newBook);
-            saveBookToFile(newBook);
-            JOptionPane.showMessageDialog(null, "Book added successfully!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Only admin can add books!");
-        }
+    // // Add Book
+    public void addBook(String title, String author, String isbn, Publisher publisher, Date publishedDate, int copiesAvailable, Genre genre) {
+        Book newBook = new Book(title, author, isbn, publisher, publishedDate, copiesAvailable, genre);
+        books.add(newBook);
+        // You might also want to update any other internal data structures or files here
     }
+
+private static void updatePublisherFile(Publisher publisher) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("publishers.txt", true))) {
+        writer.write(publisher.getName() + "," + publisher.getAddress() + "," + publisher.getEmail());
+        writer.newLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+public void showListOfBooks() {
+    if (books.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "No books available.");
+    } else {
+        StringBuilder sb = new StringBuilder();
+        for (Book book : books) {
+            sb.append("Title: ").append(book.getTitle()).append("\n")
+              .append("Author: ").append(book.getAuthor()).append("\n")
+              .append("ISBN: ").append(book.getIsbn()).append("\n")
+              .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
+              .append("Published Date: ").append(book.getPublishedDate()).append("\n")
+              .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
+              .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
+        }
+        JOptionPane.showMessageDialog(null, sb.toString(), "List of Books", JOptionPane.PLAIN_MESSAGE);
+    }
+}
+
+
+private static void updateGenreFile(Genre genre) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("genres.txt", true))) {
+        writer.write(genre.getName());
+        writer.newLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
 
     // Remove Book
     public void removeBook(Admin admin, Book book) {
@@ -117,6 +200,7 @@ public class Library {
         }
     }
 
+    
     
 
     // Save Book to File
@@ -147,7 +231,7 @@ public class Library {
         int copiesAvailable = Integer.parseInt(JOptionPane.showInputDialog("Enter copies available:"));
 
         if (publisher != null && genre != null) {
-            addBook(admin, title, author, isbn, publisher, publishedDate, copiesAvailable, genre);
+            addBook(title, author, isbn, publisher, publishedDate, copiesAvailable, genre);
         } else {
             JOptionPane.showMessageDialog(null, "Publisher or genre not found. Book not added.");
         }
@@ -252,9 +336,7 @@ public class Library {
     }
     // Other methods (getter/setter for books, etc.) omitted for brevity
 
-    public ArrayList<Book> getBooks() {
-        return books;
-    }
+    
 
     public ArrayList<Publisher> getPublishers() {
         return publishers;
