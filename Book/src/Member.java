@@ -49,7 +49,7 @@ public class Member extends User {
 
     @Override
     public boolean login(String username, String password) {
-        return getUsername().equals(username) && getPassword().equals(password);
+        return super.login(username, password);
     }
 
     public void borrowBook(Book book) {

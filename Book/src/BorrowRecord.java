@@ -25,7 +25,9 @@ public class BorrowRecord {
 
     private String generateBorrowID(ZonedDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return "B-" + member.getMemberID() + book.getTitle() + dateTime.format(formatter);
+        String formattedDate = dateTime.format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        return "B-" + member.getMemberID() + isbnPart + formattedDate;
     }
 
     public Book getBook() {
@@ -74,11 +76,12 @@ public class BorrowRecord {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
         String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
 
         return "\nBorrowing Details:\n" +
                 "\nBorrowID: " + borrowID +
                 "\nMemberID: " + member.getMemberID() +
-                "\nBook Title: " + book.getTitle() +
+                "\nBook ID: " + isbnPart +
                 "\nBorrow Date & Time: " + borrowDateTime.format(formatter) +
                 "\nReturn Date & Time: " + returnDateTime.format(formatter) +
                 "\nCurrent Date & Time: " + currentDateTimeFormatted +
@@ -87,9 +90,10 @@ public class BorrowRecord {
 
     public String toFileFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
         return borrowID + "," +
                 member.getMemberID() + "," +
-                book.getTitle() + "," +
+                isbnPart + "," +
                 borrowDateTime.format(formatter) + "," +
                 returnDateTime.format(formatter) + "," +
                 getFine();
