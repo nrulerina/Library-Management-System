@@ -1,7 +1,13 @@
+import java.io.*;
+import java.nio.file.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import javax.swing.JOptionPane;
 
 public class ReservationRecord {
+    private static int reserveCount;
     private String reserveID;
     private Member member;
     private Book book;
@@ -11,14 +17,11 @@ public class ReservationRecord {
         this.member = m;
         this.book = b;
         this.reserveDateTime = resDT;
-        this.reserveID = generateReserveID(resDT);
+        this.reserveID = "R"+ ++reserveCount;
     }
 
-    private String generateReserveID(ZonedDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formattedDate = dateTime.format(formatter);
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
-        return "R-" + member.getMemberID() + isbnPart + formattedDate;
+    public String getReserveID() {
+        return reserveID;
     }
 
     public Book getBook() {
@@ -45,18 +48,64 @@ public class ReservationRecord {
         reserveDateTime = resDT;
     }
 
-    @Override
-    public String toString(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-        String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
-
-         return "\nReservation Details:\n" +
-               "\nReserveID: " + reserveID +
-               "\nMemberID: " + member.getMemberID() +
-               "\nBookID: " + isbnPart +
-               "\nReserve Date & Time: " + reserveDateTime.format(formatter) +
-               "\nCurrent Date & Time: " + currentDateTimeFormatted ;
+    public void saveToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("reserverecords.txt", true))) {
+            writer.write(toFileFormat());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public String toFileFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        return getReserveID() + "," +
+                member.getMemberID() + "," +
+                isbnPart + "," +
+                reserveDateTime.format(formatter);
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(book.getIsbn().length() - 5) : book.getIsbn();
+
+        return "\nReservation Details:\n" +
+                "\nReserveID: " + getReserveID() +
+                "\nMemberID: " + member.getMemberID() +
+                "\nBook ID: " + isbnPart +
+                "\nReserve Date & Time: " + reserveDateTime.format(formatter) +
+                "\nEstimate Available: " + " " +
+                "\nCurrent Date & Time: " + currentDateTimeFormatted;
+    }
+
+    public static void removeRecord(String reserveID) {
+        try {
+            Path path = Paths.get("reserverecords.txt");
+            List<String> lines = Files.readAllLines(path);
+            List<String> updatedLines = new ArrayList<>();
+
+            for (String line : lines) {
+                if (line.contains(reserveID)) {
+                    // Show confirmation dialog
+                    int response = JOptionPane.showConfirmDialog(null, 
+                        "Confirm Remove?\n" + line, 
+                        "Confirm Removal", 
+                        JOptionPane.YES_NO_OPTION);
+                    
+                    if (response == JOptionPane.YES_OPTION) {
+                        // Skip adding this line to updatedLines, effectively removing it
+                        continue;
+                    }
+                }
+                updatedLines.add(line);
+            }
+
+            Files.write(path, updatedLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -202,7 +202,7 @@ public class LibraryManagementSystem {
 
     public static void memberMenu(Member member) {
         while (true) {
-            String[] options = {"Borrow Book", "Return Book", "View Borrowed Books", "View Reservation Queue", "Review Book", "View Library Card", "Show List of Books", "Logout"};
+            String[] options = {"Borrow Book", "Return Book", "Reserve Book", "View Reminder","View Announcement", "Review Book", "View Library Card", "Show List of Books", "Logout"};
             int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     
             switch (choice) {
@@ -221,10 +221,17 @@ public class LibraryManagementSystem {
                     BorrowRecord.removeRecord(borrowID); // Remove from file
                     JOptionPane.showMessageDialog(null, "Book removed successfully!");
                     break;
-                /*case 2: // View Borrowed Books
-                    member.showBorrowedBooks();
+                case 2: // Reserve Books
+                    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to reserve:");
+                    for (Book book : library.getBooks()) {
+                        if (book.getIsbn().endsWith(bookID)) {
+                            ReservationRecord rr = new ReservationRecord(member, book, ZonedDateTime.now());
+                            rr.saveToFile();
+                            JOptionPane.showMessageDialog(null, "Book reserved successfully!\n" + rr);
+                        }
+                    }
                     break;
-                case 3: // View Reservation Queue
+                /*case 3: // View Reminder + View Announcement
                     showReservationQueue();
                     break;*/
                 case 4: // Review Book
