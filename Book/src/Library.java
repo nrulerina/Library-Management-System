@@ -41,6 +41,15 @@ public class Library {
         }
         return instance;
     }
+
+    public Member findMemberByUsername(String username) {
+        for (Member member : members) {
+            if (member.getUsername().equals(username)) {
+                return member;
+            }
+        }
+        return null; // If no member is found
+    }
     // Add User
     public void addUser(User user) {
         users.add(user);
@@ -126,7 +135,7 @@ public class Library {
     public void addUser(Member member) {
         members.add(member);
     }
-    
+
     // Get all publisher names as an array of strings
     public String[] getAllPublisherNames() {
         String[] publisherNames = new String[publishers.size()];
@@ -259,14 +268,14 @@ private static void updateGenreFile(Genre genre) {
         }
     }
 
-    public Member findMemberByUsername(String username) {
-        for (User user : users) {
-            if (user instanceof Member && user.getUsername().equals(username)) {
-                return (Member) user;
-            }
-        }
-        return null; // Member not found
-    }
+    // public Member findMemberByUsername(String username) {
+    //     for (User user : users) {
+    //         if (user instanceof Member && user.getUsername().equals(username)) {
+    //             return (Member) user;
+    //         }
+    //     }
+    //     return null; // Member not found
+    // }
 
     public Admin findAdminByUsername(String username) {
         for (User user : users) {
