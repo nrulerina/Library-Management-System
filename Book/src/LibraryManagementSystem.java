@@ -28,24 +28,7 @@ public class LibraryManagementSystem {
         // Start the application
         loginMenu();
     }
-    private static void showListOfMembers() {
-        ArrayList<Member> members = library.getMembers();
-        if (members == null || members.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No members available.");
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (Member member : members) {
-                sb.append("Name: ").append(member.getName()).append("\n")
-                  .append("Email: ").append(member.getEmail()).append("\n")
-                  .append("Address: ").append(member.getAddress()).append("\n")
-                  .append("Phone Number: ").append(member.getPhoneNumber()).append("\n")
-                  .append("Member ID: ").append(member.getMemberID()).append("\n")
-                  .append("Username: ").append(member.getUsername()).append("\n")
-                  .append("Registration Date: ").append(member.getRegistrationDate()).append("\n\n");
-            }
-            JOptionPane.showMessageDialog(null, sb.toString(), "List of Members", JOptionPane.PLAIN_MESSAGE);
-        }
-    }
+    
     private static void loadUsersFromFile(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
             String line;
@@ -83,6 +66,7 @@ public class LibraryManagementSystem {
         }
     }
 
+    
     private static Date parseDate(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // Adjust format as per your date format in file
         try {
@@ -334,7 +318,7 @@ public class LibraryManagementSystem {
                     library.showListOfBooks(); // Assuming admin has this method
                     break;
                 case 5:
-                    showListOfMembers(); // Assuming admin has this method
+                    library.showListOfMembers(); // Assuming admin has this method
                     break;
                 case 6:
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
@@ -503,6 +487,7 @@ public static void updateGenreFile(Genre genre) {
         return null;
     }
 
+
     private static void manageMember(Admin admin) {
         String memberId = JOptionPane.showInputDialog("Enter member ID to manage:");
         // Placeholder for managing members
@@ -517,18 +502,7 @@ public static void updateGenreFile(Genre genre) {
         JOptionPane.showMessageDialog(null, "Announcement added successfully.");
     }
 
-    // private static void memberLogin() {
-    //     String username = JOptionPane.showInputDialog("Enter member username:");
-    //     String password = JOptionPane.showInputDialog("Enter member password:");
-
-    //     Member member = library.findMemberByUsername(username);
-
-    //     if (member != null && member.login(username, password)) {
-    //         memberMenu(member);
-    //     } else {
-    //         JOptionPane.showMessageDialog(null, "Invalid username or password.");
-    //     }
-    // }
+    
 
     
 

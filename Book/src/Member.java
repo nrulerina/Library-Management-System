@@ -11,6 +11,25 @@ public class Member extends User {
         this.memberID = memberID;
         this.registrationDate = registrationDate;
     }
+    public String getUsername(){
+        return username;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
 
     public String getMemberID() {
         return memberID;

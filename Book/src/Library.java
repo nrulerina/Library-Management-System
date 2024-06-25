@@ -17,8 +17,7 @@ public class Library {
     private ArrayList<Genre> genres;
     private ArrayList<User> users;
     private ArrayList<Member> members;
-
-
+    private ArrayList<Admin> admins;
 
     public Library(String name, String address) {
         this.name = name;
@@ -28,7 +27,7 @@ public class Library {
         this.publishers = new ArrayList<>();
         this.users = new ArrayList<>();
         this.members = new ArrayList<>();
-
+        this.admins = new ArrayList<>();
 
     }
 
@@ -36,7 +35,6 @@ public class Library {
         return members;
     }
 
-    
     public static Library getInstance(String name, String address) {
         if (instance == null) {
             instance = new Library(name, address);
@@ -51,7 +49,24 @@ public class Library {
         return books; // Assuming 'books' is your list of all books in the library
     }
     
-    
+    public void showListOfMembers() {
+        if (members.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No members available.");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (Member member : members) {
+                sb.append("Name: ").append(member.getName()).append("\n")
+                  .append("Email: ").append(member.getEmail()).append("\n")
+                  .append("Address: ").append(member.getAddress()).append("\n")
+                  .append("Phone Number: ").append(member.getPhoneNumber()).append("\n")
+                  .append("Member ID: ").append(member.getMemberID()).append("\n")
+                  .append("Username: ").append(member.getUsername()).append("\n")
+                  .append("Registration Date: ").append(member.getRegistrationDate()).append("\n\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "List of Members", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
     
 
     // public List<Book> getAvailableBooks() {
@@ -64,32 +79,13 @@ public class Library {
     //     return availableBooks;
     // }
 
-
+    public ArrayList<Admin> getAdmins() {
+        return admins;
+    }
 
     // Add Genre
     public void addGenre(Genre genre) {
         genres.add(genre);
-    }
-
-    public void showListOfMembers() {
-        if (members.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No members available.");
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (User user : members) {
-                if (user instanceof Member) {
-                    Member member = (Member) user;
-                    sb.append("Name: ").append(member.getName()).append("\n")
-                      .append("Email: ").append(member.getEmail()).append("\n")
-                      .append("Address: ").append(member.getAddress()).append("\n")
-                      .append("Phone Number: ").append(member.getPhoneNumber()).append("\n")
-                      .append("Member ID: ").append(member.getMemberID()).append("\n")
-                      .append("Username: ").append(member.getUsername()).append("\n")
-                      .append("Registration Date: ").append(member.getRegistrationDate()).append("\n\n");
-                }
-            }
-            JOptionPane.showMessageDialog(null, sb.toString(), "List of Members", JOptionPane.PLAIN_MESSAGE);
-        }
     }
 
     // Remove Genre
@@ -127,6 +123,10 @@ public class Library {
         return null;
     }
 
+    public void addUser(Member member) {
+        members.add(member);
+    }
+    
     // Get all publisher names as an array of strings
     public String[] getAllPublisherNames() {
         String[] publisherNames = new String[publishers.size()];
@@ -143,6 +143,12 @@ public class Library {
             genreNames[i] = genres.get(i).getName();
         }
         return genreNames;
+    }
+
+    public void addMember(String name, String email, String address, String phoneNumber, String username, String password, Date registrationDate, String memberID) {
+        Member member = new Member(name, email, address, phoneNumber, username, password, registrationDate, memberID);
+        addUser(member);
+        JOptionPane.showMessageDialog(null, "Member added successfully.");
     }
 
     // // Add Book
