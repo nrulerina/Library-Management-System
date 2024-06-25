@@ -242,6 +242,9 @@ public class LibraryManagementSystem {
                 case 6: // Show List of Books
                     showListOfBooks();
                     break;/* */
+                case 5:
+                viewLibraryCard(member);
+                break;    
                 case 7: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
                     return; // Exit the showMenu() method and effectively end the program 
@@ -326,6 +329,12 @@ public class LibraryManagementSystem {
                     break;
             }
         }
+    }
+
+      private static void viewLibraryCard(Member member) {
+        // Display library card information for the member
+        LibraryCard libraryCard = member.getLibraryCard();
+        JOptionPane.showMessageDialog(null, libraryCard.getFormattedDetails(), "Library Card", JOptionPane.PLAIN_MESSAGE);
     }
 
     public static void addBook(Admin admin) {
@@ -445,7 +454,7 @@ public class LibraryManagementSystem {
         }
     }
     
-    
+
     
 
 public static void updatePublisherFile(Publisher publisher) {
