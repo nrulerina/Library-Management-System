@@ -6,11 +6,11 @@ public class User {
     protected String address;
     protected String phoneNumber;
     protected String memberID;
-    protected Date dateOfBirth;
     protected String username;
     protected String password;
+    protected Date registrationDate;
 
-    public User(String name, String email, String address, String phoneNumber, String memberID, String username, String password, Date dateOfBirth) {
+    public User(String name, String email, String address, String phoneNumber, String username, String password, Date registrationDate) {
         this.name = name;
         this.email = email;
         this.address = address;
@@ -18,11 +18,7 @@ public class User {
         this.memberID = memberID;
         this.username = username;
         this.password = password;
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public boolean login(String username, String password) {
-        return this.username.equals(username) && this.password.equals(password);
+        this.registrationDate = registrationDate;
     }
 
     // Getters and Setters for all fields
@@ -67,14 +63,6 @@ public class User {
         this.memberID = memberID;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -90,4 +78,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean login(String username, String password) {
+        return this.username.equals(username) && this.password.equals(password);
+    }
+
 }

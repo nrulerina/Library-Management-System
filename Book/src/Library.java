@@ -254,13 +254,24 @@ private static void updateGenreFile(Genre genre) {
     }
 
     public Member findMemberByUsername(String username) {
-        for (Member member : members) {
-            if (member.getUsername().equals(username)) {
-                return member;
+        for (User user : users) {
+            if (user instanceof Member && user.getUsername().equals(username)) {
+                return (Member) user;
             }
         }
         return null; // Member not found
     }
+
+    public Admin findAdminByUsername(String username) {
+        for (User user : users) {
+            if (user instanceof Admin && user.getUsername().equals(username)) {
+                return (Admin) user;
+            }
+        }
+        return null; // Admin with the given username not found
+    }
+    // Other methods (getter/setter for books, etc.) omitted for brevity
+
 
     // Select existing publisher
     private Publisher selectExistingPublisher() {
@@ -323,20 +334,6 @@ private static void updateGenreFile(Genre genre) {
         addGenre(newGenre);
         return newGenre;
     }
-
-    
-
-    public Admin findAdminByUsername(String username) {
-        for (User user : users) {
-            if (user instanceof Admin && user.getUsername().equals(username)) {
-                return (Admin) user;
-            }
-        }
-        return null; // Admin with the given username not found
-    }
-    // Other methods (getter/setter for books, etc.) omitted for brevity
-
-    
 
     public ArrayList<Publisher> getPublishers() {
         return publishers;

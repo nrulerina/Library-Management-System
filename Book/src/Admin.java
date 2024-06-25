@@ -7,9 +7,9 @@ public class Admin extends User {
     private String adminID;
     private ArrayList<Announcement> announcements;
 
-    public Admin(String name, String email, String address, String phoneNumber, String memberID,
-                String username, String password, Date dateOfBirth, String adminID) {
-        super(name, email, address, phoneNumber, memberID, username, password, dateOfBirth);
+    public Admin(String name, String email, String address, String phoneNumber,
+                String username, String password, Date registrationDate, String adminID) {
+        super(name, email, address, phoneNumber, username, password, registrationDate);
         this.adminID = adminID;
         this.announcements = new ArrayList<>();
     }

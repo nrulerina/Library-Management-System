@@ -4,15 +4,13 @@ public class Member extends User {
     private String memberID;
     private Date registrationDate;
 
-    public Member(String name, String email, String address, String phoneNumber, String memberID,
-                  String username, String password, Date registrationDate,String userID) {
-                    super(name, email, address, phoneNumber,memberID, username, password, registrationDate);
+    public Member(String name, String email, String address, String phoneNumber,
+                  String username, String password, Date registrationDate,String memberID) {
+                    super(name, email, address, phoneNumber, username, password, registrationDate);
 
         this.memberID = memberID;
         this.registrationDate = registrationDate;
     }
-
-    
 
     public String getMemberID() {
         return memberID;
@@ -32,8 +30,7 @@ public class Member extends User {
 
     @Override
     public boolean login(String username, String password) {
-        // Custom implementation for member login if needed
-        return super.login(username, password);
+        return getUsername().equals(username) && getPassword().equals(password);
     }
 
     public void borrowBook(Book book) {

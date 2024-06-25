@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -46,35 +47,35 @@ public class LibraryManagementSystem {
         }
     }
     private static void loadUsersFromFile(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] userData = line.split(",", -1); // Split by comma, include empty trailing fields
-                if (userData.length < 10) {
-                    System.err.println("Incomplete user data line: " + line);
-                    continue;
-                }
-    
-                String userType = userData[0].trim();
-                String name = userData[1].trim();
-                String email = userData[2].trim();
-                String address = userData[3].trim();
-                String phoneNumber = userData[4].trim();
-                String memberID = userData[5].trim();
-                String username = userData[6].trim();
-                String password = userData[7].trim();
-                Date registrationDate = parseDate(userData[8].trim());
-    
+                String[] userData = line.split(",");
+                String userType = userData[0].trim(); // Assuming the first value indicates user type
                 if (userType.equalsIgnoreCase("admin")) {
+                    String name = userData[1].trim();
+                    String email = userData[2].trim();
+                    String address = userData[3].trim();
+                    String phoneNumber = userData[5].trim();
+                    String username = userData[6].trim();
+                    String password = userData[7].trim();
+                    Date registrationDate = parseDate(userData[8].trim()); // Assuming date is in a specific format
                     String adminID = userData[9].trim();
-                    Admin admin = new Admin(name, email, address, phoneNumber, memberID, username, password, registrationDate, adminID);
-                    library.addUser(admin); // Assuming library has addUser method
-                } else if (userType.equalsIgnoreCase("member")) {
-                    String userID = userData[9].trim();
-                    Member member = new Member(name, email, address, phoneNumber, memberID, username, password, registrationDate, userID);
-                    library.addUser(member); // Assuming library has addUser method
-                } else {
-                    System.err.println("Unknown user type: " + userType);
+
+                    Admin admin = new Admin(name, email, address, phoneNumber, username, password, registrationDate, adminID);
+                    library.addUser(admin); // Assuming addUser method in Library adds users to library
+                } else if (userType.equalsIgnoreCase("member")){
+                    String name = userData[1].trim();
+                    String email = userData[2].trim();
+                    String address = userData[3].trim();
+                    String phoneNumber = userData[5].trim();
+                    String username = userData[6].trim();
+                    String password = userData[7].trim();
+                    Date registrationDate = parseDate(userData[8].trim()); // Assuming date is in a specific format
+                    String memberID = userData[9].trim();
+
+                    Member member = new Member(name, email, address, phoneNumber, username, password, registrationDate, memberID);
+                    library.addUser(member);
                 }
             }
         } catch (IOException e) {
@@ -214,35 +215,52 @@ public class LibraryManagementSystem {
     }
     
 
-    private static void memberMenu(Member member) {
+    public static void memberMenu(Member member) {
         while (true) {
-            // Display menu options using JOptionPane
-            String[] options = {"View Borrowed Books", "View Publishers with Books", "View Genres with Books", "Borrow a Book", "Renew Membership", "Logout"};
-            int choice = JOptionPane.showOptionDialog(null, "Welcome, " + member.getName() + "! Select an option:",
-                    "Member Menu", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+            String[] options = {"Borrow Book", "Return Book", "View Borrowed Books", "View Reservation Queue", "Review Book", "View Library Card", "Show List of Books", "Logout"};
+            int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     
             switch (choice) {
-                case 0: // View Borrowed Books
-                    // viewBorrowedBooks(member);
+                case 0: // Borrow Book
+                    String bookTitle = JOptionPane.showInputDialog("Enter book Title to borrow:");
+                    for (Book book : library.getBooks()) {
+                        if (book.getTitle().equals(bookTitle)) {
+                            BorrowRecord br = new BorrowRecord(member, book, ZonedDateTime.now());
+                            br.saveToFile("borrow_records.txt");
+                            break;
+                        }
+                    }
                     break;
-                case 1: // View Publishers with Books
-                    viewPublishersWithBooks();
+                case 1: // Return Book
+                    bookTitle = JOptionPane.showInputDialog("Enter book Title to return:");
+                    for (Book book : library.getBooks()) {
+                        if (book.getTitle().equals(bookTitle)) {
+                            member.returnBook(book);
+                            break;
+                        }
+                    }
                     break;
-                case 2: // View Genres with Books
-                    viewGenresWithBooks();
+                /*case 2: // View Borrowed Books
+                    member.showBorrowedBooks();
                     break;
-                case 3: // Borrow a Book
-                    // borrowBook(member);
+                case 3: // View Reservation Queue
+                    showReservationQueue();
                     break;
-                case 4: // Renew Membership
-                    // renewMembership(member);
+                case 4: // Review Book
+                    bookID = JOptionPane.showInputDialog("Enter book ID to review:");
+                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                    String comment = JOptionPane.showInputDialog("Enter comment:");
+                    reviewBook(bookID, rating, comment);
                     break;
-                case 5: // Logout
-                    JOptionPane.showMessageDialog(null, "Logging out...");
-                    return; // Exit the method and return to login screen
-                default:
-                    JOptionPane.showMessageDialog(null, "Invalid choice. Please select a valid option.");
+                case 5: // View Library Card
+                    viewLibraryCard();
                     break;
+                case 6: // Show List of Books
+                    showListOfBooks();
+                    break;/* */
+                case 7: // Logout
+                    JOptionPane.showMessageDialog(null, "Logged out successfully.");
+                    return; // Exit the showMenu() method and effectively end the program 
             }
         }
     }
@@ -277,11 +295,6 @@ public class LibraryManagementSystem {
         JOptionPane.showMessageDialog(null, message.toString(), "Genres with Books", JOptionPane.INFORMATION_MESSAGE);
     }
     
-  
-    
-    
-    
-
     private static void adminLogin() {
         String username = JOptionPane.showInputDialog("Enter admin username:");
         String password = JOptionPane.showInputDialog("Enter admin password:");
