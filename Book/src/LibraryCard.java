@@ -5,7 +5,7 @@ public class LibraryCard {
     private Member member;
     private Date expiryDate;
     private Date issueDate;
-     private LibraryCard libraryCard;
+    
 
     public LibraryCard(Member member, Date expiryDate, Date issueDate) {
         this.cardID = generateCardID(); // Generate card ID upon creation
