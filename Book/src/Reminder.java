@@ -1,17 +1,17 @@
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.*;
+import java.util.*;
 
 public class Reminder {
     private Member member;
     private Book book;
-    private BorrowRecord br;
-    private ReservationRecord rr;
+    private ArrayList<BorrowRecord> brList;
+    private ArrayList<ReservationRecord> rrList;
     private ZonedDateTime reminderDate;
 
-    public Reminder (Book b, Member m, ZonedDateTime rD) {
-        this.book = b;
+    public Reminder (Member m) {
         this.member= m;
-        this.reminderDate = rD;
+        brList=new ArrayList<>();
+        rrList=new ArrayList<>();
     }
 
     public Book getBook() {
@@ -36,6 +36,14 @@ public class Reminder {
 
     public void setReminderDate(ZonedDateTime remD) {
         reminderDate = remD;
+    }
+
+    public void addBorrowRecord(BorrowRecord br) {
+        brList.add(br);
+    }
+
+    public void addReservationRecord(ReservationRecord rr) {
+        rrList.add(rr);
     }
 }
 

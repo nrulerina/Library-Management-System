@@ -206,23 +206,38 @@ public class LibraryManagementSystem {
     
             switch (choice) {
                 case 0: // Borrow Book
-                    String bookTitle = JOptionPane.showInputDialog("Enter book Title to borrow:");
+                    String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to borrow:");
                     for (Book book : library.getBooks()) {
-                        if (book.getTitle().equals(bookTitle)) {
+                        if (book.getIsbn().endsWith(bookID)) {
                             BorrowRecord br = new BorrowRecord(member, book, ZonedDateTime.now());
-                            br.saveToFile("borrow_records.txt");
-                            break;
+                            br.saveToFile();
+                            JOptionPane.showMessageDialog(null, "Book borrowed successfully!\n" + br);
                         }
                     }
                     break;
                 case 1: // Return Book
-                    bookTitle = JOptionPane.showInputDialog("Enter book Title to return:");
+                bookID = JOptionPane.showInputDialog("Enter book Title to return:");
                     for (Book book : library.getBooks()) {
-                        if (book.getTitle().equals(bookTitle)) {
+                        if (book.getTitle().equals(bookID)) {
                             member.returnBook(book);
                             break;
                         }
                     }
+                    break;
+                /*case 4: // Review Book
+                    String bookID = JOptionPane.showInputDialog("Enter book ID to review:");
+                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                    String comment = JOptionPane.showInputDialog("Enter comment:");
+                    Review.addReview(member, findBookByID(bookID), rating, comment);
+
+                // Display the added review information
+                    System.out.println("Review added successfully:");
+                    System.out.println("Book ID: " + bookID);
+                    System.out.println("Rating: " + rating);
+                    System.out.println("Comment: " + comment);
+                    System.out.println();
+
+                // Return to member menu
                     break;
                 /*case 2: // View Borrowed Books
                     member.showBorrowedBooks();
@@ -245,7 +260,7 @@ public class LibraryManagementSystem {
     
                 case 7: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
-                    return; // Exit the showMenu() method and effectively end the program 
+                    return; 
             }
         }
     }
