@@ -203,59 +203,106 @@ public class LibraryManagementSystem {
 
     public static void memberMenu(Member member) {
         while (true) {
-            String[] options = {"Borrow Book", "Return Book", "Reserve Book", "View Reminder", "Review Book", "View Library Card", "Show List of Books", "View Reviews", "Logout"};
-            int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            String[] options = {"Borrow Book", "Return Book", "Reserve Book", "View Reminder", "Review Book", "View Library Card", "Show List of Books", "View Reviews", "View Announcement", "Logout"};
+        int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
     
             switch (choice) {
                 case 0: // Borrow Book
-                    String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to borrow:");
-                    for (Book book : library.getBooks()) {
-                        if (book.getIsbn().endsWith(bookID)) {
-                            BorrowRecord br = new BorrowRecord(member, book, ZonedDateTime.now());
-                            br.saveToFile();
-                            JOptionPane.showMessageDialog(null, "Book borrowed successfully!\n" + br);
-                        }
-                    }
+                    borrowBook(member);
                     break;
                 case 1: // Return Book
-                    String borrowID = JOptionPane.showInputDialog("Enter borrow ID to return:");
-                    BorrowRecord.removeRecord(borrowID); // Remove from file
-                    JOptionPane.showMessageDialog(null, "Book removed successfully!");
+                    returnBook(member);
                     break;
-                case 2:
-                    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to reserve:");
-                    for (Book book : library.getBooks()) {
-                        if (book.getIsbn().endsWith(bookID)) {
-                            ReservationRecord rr = new ReservationRecord(member, book, ZonedDateTime.now());
-                            rr.saveToFile();
-                            JOptionPane.showMessageDialog(null, "Book reserved successfully!\n" + rr);
-                        }
-                    }
+                case 2: // Reserve Book
+                    reserveBook(member);
                     break;
-               
+                case 3: // View Reminder
+                    // viewReminder(member);
+                    break;
                 case 4: // Review Book
                     reviewBook(member);
                     break;
-                
-                
                 case 5: // View Library Card
-                viewLibraryCard(member);
+                    viewLibraryCard(member);
                     break;
-                case 6:  //Show List of Books
+                case 6: // Show List of Books
                     showBooksSelectionMenu();
                     break;
-
-                    case 7: // View Reviews
-                    viewReviews();   
-                    break; 
-    
-                case 8: // Logout
+                case 7: // View Reviews
+                    viewReviews();
+                    break;
+                case 8: // View Announcement
+                    displayAnnouncements();
+                    break;
+                case 9: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
-                    return; 
+                    return;
             }
         }
     }
 
+    private static void borrowBook(Member member) {
+        String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to borrow:");
+        for (Book book : library.getBooks()) {
+            if (book.getIsbn().endsWith(bookID)) {
+                BorrowRecord br = new BorrowRecord(member, book, ZonedDateTime.now());
+                br.saveToFile();
+                JOptionPane.showMessageDialog(null, "Book borrowed successfully!\n" + br);
+            }
+        }
+    }
+    
+    private static void returnBook(Member member) {
+        String borrowID = JOptionPane.showInputDialog("Enter borrow ID to return:");
+        BorrowRecord.removeRecord(borrowID); // Remove from file
+        JOptionPane.showMessageDialog(null, "Book removed successfully!");
+    }
+    
+    private static void reserveBook(Member member) {
+        String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to reserve:");
+        for (Book book : library.getBooks()) {
+            if (book.getIsbn().endsWith(bookID)) {
+                ReservationRecord rr = new ReservationRecord(member, book, ZonedDateTime.now());
+                rr.saveToFile();
+                JOptionPane.showMessageDialog(null, "Book reserved successfully!\n" + rr);
+            }
+        }
+    }
+
+    private static void displayAnnouncements() {
+        List<Announcement> announcements = loadAnnouncementsFromFile();
+        if (announcements.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No announcements available.");
+        } else {
+            StringBuilder sb = new StringBuilder("Announcements:\n\n");
+            for (Announcement announcement : announcements) {
+                sb.append(announcement.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Announcements", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    private static List<Announcement> loadAnnouncementsFromFile() {
+        List<Announcement> announcements = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("announcement.txt"))) {
+            String line;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Date: ")) {
+                    Date date = dateFormat.parse(line.substring(6).trim());
+                    String message = reader.readLine().substring(9).trim();
+                    announcements.add(new Announcement(message, date));
+                    reader.readLine(); // Read blank line separator
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return announcements;
+    }
+
+    
      private static void reviewBook(Member member) {
         String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
         Book book = findBookByID(bookID);
@@ -678,7 +725,7 @@ private static void updateBooksFile() {
     private static void addAnnouncement(Admin admin) {
         String message = JOptionPane.showInputDialog("Enter announcement message:");
         Announcement announcement = new Announcement(message, new Date());
-        admin.addAnnouncement(announcement); // Assuming admin has this method
+        admin.addAnnouncement(announcement); // Save to admin's list and file
         JOptionPane.showMessageDialog(null, "Announcement added successfully.");
     }
 

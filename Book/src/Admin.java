@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -30,8 +34,19 @@ public class Admin extends User {
 
     public void addAnnouncement(Announcement announcement) {
         announcements.add(announcement);
+        saveAnnouncementToFile(announcement);
     }
 
+     private void saveAnnouncementToFile(Announcement announcement) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("announcement.txt", true))) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            writer.write("Date: " + dateFormat.format(announcement.getDate()) + "\n");
+            writer.write("Message: " + announcement.getMessage() + "\n\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void removeAnnouncement(Announcement announcement) {
         announcements.remove(announcement);
     }
