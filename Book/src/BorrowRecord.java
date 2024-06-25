@@ -1,16 +1,9 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-//import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import javax.swing.JOptionPane;
 
 public class BorrowRecord {
@@ -20,14 +13,13 @@ public class BorrowRecord {
     private Book book;
     private ZonedDateTime borrowDateTime;
     private ZonedDateTime returnDateTime;
-    //private ArrayList<BorrowRecord> brList;
 
     public BorrowRecord(Member m, Book b, ZonedDateTime bDT) {
         this.member = m;
         this.book = b;
         this.borrowDateTime = bDT;
         this.returnDateTime = bDT.plusDays(7);
-        this.borrowID = "B"+ borrowCount++;
+        this.borrowID = "B"+ ++borrowCount;
     }
 
     public String getBorrowID() {
@@ -87,7 +79,8 @@ public class BorrowRecord {
 
     public String toFileFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(book.getIsbn().length() - 5) : book.getIsbn();
+
         return getBorrowID() + "," +
                 member.getMemberID() + "," +
                 isbnPart + "," +
@@ -100,15 +93,14 @@ public class BorrowRecord {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
         String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
-        borrowID = "B"+borrowCount;
-
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(book.getIsbn().length() - 5) : book.getIsbn();
+    
         return "\nBorrowing Details:\n" +
                 "\nBorrowID: " + getBorrowID() +
                 "\nMemberID: " + member.getMemberID() +
                 "\nBook ID: " + isbnPart +
                 "\nBorrow Date & Time: " + borrowDateTime.format(formatter) +
-                "\nReturn Date & Time: " + returnDateTime.format(formatter) +
+                "\nReturn Before: " + returnDateTime.format(formatter) +
                 "\nCurrent Date & Time: " + currentDateTimeFormatted +
                 "\nFine: " + getFine();
     }

@@ -266,7 +266,6 @@ case 4: // Review Book
 
                     case 7: // View Reviews
                     viewReviews(member);    
-                    break;
     
                 case 8: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
