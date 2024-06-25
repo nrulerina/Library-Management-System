@@ -222,36 +222,7 @@ public class LibraryManagementSystem {
                     BorrowRecord.removeRecord(borrowID); // Remove from file
                     JOptionPane.showMessageDialog(null, "Book removed successfully!");
                     break;
-                /*case 4: // Review Book
-                    String bookID = JOptionPane.showInputDialog("Enter book ID to review:");
-                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                    String comment = JOptionPane.showInputDialog("Enter comment:");
-                    Review.addReview(member, findBookByID(bookID), rating, comment);
-
-                // Display the added review information
-                    System.out.println("Review added successfully:");
-                    System.out.println("Book ID: " + bookID);
-                    System.out.println("Rating: " + rating);
-                    System.out.println("Comment: " + comment);
-                    System.out.println();
-
-                // Return to member menu
-                    break;
-                /*case 2: // View Borrowed Books
-                    member.showBorrowedBooks();
-                    break;
-                case 3: // View Reservation Queue
-                    showReservationQueue();
-                    break;
-                case 4: // Review Book
-                    bookID = JOptionPane.showInputDialog("Enter book ID to review:");
-                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                    String comment = JOptionPane.showInputDialog("Enter comment:");
-                    reviewBook(bookID, rating, comment);
-                    break;*/
-                    
-
-// Assuming this code is inside a method or a class where JOptionPane can be used
+               
 case 4: // Review Book
                     reviewBook(member);
                     break;
