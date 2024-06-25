@@ -2,7 +2,7 @@ Title: The Great Gatsby
 Author: F. Scott Fitzgerald
 ISBN: 9780743273565
 Publisher: Scribner
-Published Date: Thu May 09 00:00:00 MYT 1968
+Published Date: 1968-05-09
 Copies Available: 5
 Genre: Classic
 
@@ -10,7 +10,7 @@ Title: To Kill a Mockingbird
 Author: Harper Lee
 ISBN: 9780061120084
 Publisher: Harper Perennial Modern Classics
-Published Date: Tue Jun 18 00:00:00 MYT 1996
+Published Date: 1996-06-18
 Copies Available: 3
 Genre: Fiction
 
@@ -18,7 +18,7 @@ Title: Pride and Prejudice
 Author: Jane Austen
 ISBN: 9780486284736
 Publisher: Dover Publications
-Published Date: Mon Dec 06 00:00:00 MYT 1813
+Published Date: 1813-12-06
 Copies Available: 7
 Genre: Romance
 
@@ -26,7 +26,7 @@ Title: Dune
 Author: Frank Herbert
 ISBN: 4567890123
 Publisher: Simon $ Schuster
-Published Date: Fri Mar 15 00:00:00 MYT 2024
+Published Date: 2024-03-15
 Copies Available: 3
 Genre: Science Fiction
 
@@ -34,7 +34,7 @@ Title: Go to The Moon
 Author: OhBulan
 ISBN: 236597856
 Publisher: Harper Perennial Modern Classics
-Published Date: Thu Aug 20 00:00:00 MYT 2015
+Published Date: 2015-08-20
 Copies Available: 3
 Genre: Romance
 

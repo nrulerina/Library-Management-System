@@ -691,7 +691,8 @@ private static void updateBooksFile() {
             writer.newLine();
             writer.write("Publisher: " + book.getPublisher().getName());
             writer.newLine();
-            writer.write("Published Date: " + book.getPublishedDate());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            writer.write("Published Date: " + dateFormat.format(book.getPublishedDate()));
             writer.newLine();
             writer.write("Copies Available: " + book.getCopiesAvailable());
             writer.newLine();
