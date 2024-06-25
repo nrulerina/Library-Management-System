@@ -217,13 +217,9 @@ public class LibraryManagementSystem {
                     }
                     break;
                 case 1: // Return Book
-                bookID = JOptionPane.showInputDialog("Enter book Title to return:");
-                    for (Book book : library.getBooks()) {
-                        if (book.getTitle().equals(bookID)) {
-                            member.returnBook(book);
-                            break;
-                        }
-                    }
+                    String borrowID = JOptionPane.showInputDialog("Enter borrow ID to return:");
+                    BorrowRecord.removeRecord(borrowID); // Remove from file
+                    JOptionPane.showMessageDialog(null, "Book removed successfully!");
                     break;
                 /*case 4: // Review Book
                     String bookID = JOptionPane.showInputDialog("Enter book ID to review:");
