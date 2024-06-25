@@ -224,6 +224,21 @@ public class LibraryManagementSystem {
                         }
                     }
                     break;
+                    case 4: // Review Book
+    String bookID = JOptionPane.showInputDialog("Enter book ID to review:");
+    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+    String comment = JOptionPane.showInputDialog("Enter comment:");
+    Review.addReview(member, findBookByID(bookID), rating, comment);
+
+    // Display the added review information
+    System.out.println("Review added successfully:");
+    System.out.println("Book ID: " + bookID);
+    System.out.println("Rating: " + rating);
+    System.out.println("Comment: " + comment);
+    System.out.println();
+
+    // Return to member menu
+    break;
                 /*case 2: // View Borrowed Books
                     member.showBorrowedBooks();
                     break;
