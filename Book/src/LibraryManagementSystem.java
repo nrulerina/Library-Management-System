@@ -235,16 +235,14 @@ public class LibraryManagementSystem {
                     int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
                     String comment = JOptionPane.showInputDialog("Enter comment:");
                     reviewBook(bookID, rating, comment);
-                    break;
+                    break;*/
                 case 5: // View Library Card
-                    viewLibraryCard();
-                    break;
-                case 6: // Show List of Books
-                    showListOfBooks();
-                    break;/* */
-                case 5:
                 viewLibraryCard(member);
-                break;    
+                    break;
+                case 6:  //Show List of Books
+                    showBooksSelectionMenu();
+                    break;
+    
                 case 7: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
                     return; // Exit the showMenu() method and effectively end the program 
@@ -252,34 +250,91 @@ public class LibraryManagementSystem {
         }
     }
 
+    private static void showBooksSelectionMenu() {
+        String[] options = {"View by Genre", "View by Publisher", "Show All Books"};
+        int choice = JOptionPane.showOptionDialog(null, "Select an option:", "Show List of Books", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    
+        switch (choice) {
+            case 0:
+                viewBooksByGenre();
+                return;
+            case 1:
+                viewBooksByPublisher();
+                return;
+            case 2:
+                library.showListOfBooks(); // Assuming library has this method
+                return;
+        }
+    }
+
     
 
-    private static void viewPublishersWithBooks() {
-        // Retrieve publishers with their associated books from the library
-        // Example: Construct a message to display publishers and their books using StringBuilder
-        StringBuilder message = new StringBuilder("Publishers with Books:\n");
-        for (Publisher publisher : library.getPublishers()) {
-            message.append("- ").append(publisher.getName()).append(": ");
-            for (Book book : library.getBooks()) {
-                message.append(book.getTitle()).append(", ");
-            }
-            message.append("\n");
+    private static void viewBooksByGenre() {
+        JComboBox<String> genreComboBox = new JComboBox<>();
+        for (Genre genre : library.getGenres()) {
+            genreComboBox.addItem(genre.getName());
         }
-        JOptionPane.showMessageDialog(null, message.toString(), "Publishers with Books", JOptionPane.INFORMATION_MESSAGE);
+    
+        int option = JOptionPane.showOptionDialog(null, genreComboBox, 
+                    "Select Genre", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+                    null, null, null);
+    
+        if (option != JOptionPane.CLOSED_OPTION) {
+            String selectedGenre = (String) genreComboBox.getSelectedItem();
+            StringBuilder sb = new StringBuilder();
+            boolean foundBooks = false;
+            for (Book book : library.getBooks()) {
+                if (book.getGenre().getName().equals(selectedGenre)) {
+                    sb.append("Title: ").append(book.getTitle()).append("\n")
+                      .append("Author: ").append(book.getAuthor()).append("\n")
+                      .append("ISBN: ").append(book.getIsbn()).append("\n")
+                      .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
+                      .append("Published Date: ").append(book.getPublishedDate()).append("\n")
+                      .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
+                      .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
+                    foundBooks = true;
+                }
+            }
+            if (!foundBooks) {
+                JOptionPane.showMessageDialog(null, "No books recorded for genre: " + selectedGenre, "No Books", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, sb.toString(), "Books in Genre: " + selectedGenre, JOptionPane.PLAIN_MESSAGE);
+            }
+        }
     }
     
-    private static void viewGenresWithBooks() {
-        // Retrieve genres with their associated books from the library
-        // Example: Construct a message to display genres and their books using StringBuilder
-        StringBuilder message = new StringBuilder("Genres with Books:\n");
-        for (Genre genre : library.getGenres()) {
-            message.append("- ").append(genre.getName()).append(": ");
-            for (Book book : library.getBooks()) {
-                message.append(book.getTitle()).append(", ");
-            }
-            message.append("\n");
+    private static void viewBooksByPublisher() {
+        JComboBox<String> publisherComboBox = new JComboBox<>();
+        for (Publisher publisher : library.getPublishers()) {
+            publisherComboBox.addItem(publisher.getName());
         }
-        JOptionPane.showMessageDialog(null, message.toString(), "Genres with Books", JOptionPane.INFORMATION_MESSAGE);
+    
+        int option = JOptionPane.showOptionDialog(null, publisherComboBox, 
+                    "Select Publisher", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+                    null, null, null);
+    
+        if (option != JOptionPane.CLOSED_OPTION) {
+            String selectedPublisher = (String) publisherComboBox.getSelectedItem();
+            StringBuilder sb = new StringBuilder();
+            boolean foundBooks = false;
+            for (Book book : library.getBooks()) {
+                if (book.getPublisher().getName().equals(selectedPublisher)) {
+                    sb.append("Title: ").append(book.getTitle()).append("\n")
+                      .append("Author: ").append(book.getAuthor()).append("\n")
+                      .append("ISBN: ").append(book.getIsbn()).append("\n")
+                      .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
+                      .append("Published Date: ").append(book.getPublishedDate()).append("\n")
+                      .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
+                      .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
+                    foundBooks = true;
+                }
+            }
+            if (!foundBooks) {
+                JOptionPane.showMessageDialog(null, "No books recorded for publisher: " + selectedPublisher, "No Books", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, sb.toString(), "Books by Publisher: " + selectedPublisher, JOptionPane.PLAIN_MESSAGE);
+            }
+        }
     }
     
     private static void adminLogin() {
