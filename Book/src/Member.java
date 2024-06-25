@@ -4,12 +4,18 @@ public class Member extends User {
     private String memberID;
     private Date registrationDate;
 
-    public Member(String name, String email, String address, String phoneNumber,
-                  String username, String password, Date registrationDate,String memberID) {
-                    super(name, email, address, phoneNumber, username, password, registrationDate);
+    private LibraryCard libraryCard;
 
+    public Member(String name, String email, String address, String phoneNumber,
+                  String username, String password, Date registrationDate, String memberID) {
+        super(name, email, address, phoneNumber, username, password, registrationDate);
         this.memberID = memberID;
         this.registrationDate = registrationDate;
+        this.libraryCard = new LibraryCard(this, new Date(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000), new Date());
+    }
+
+    public LibraryCard getLibraryCard() {
+        return libraryCard;
     }
     public String getUsername(){
         return username;
