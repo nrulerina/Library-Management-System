@@ -246,7 +246,7 @@ public class LibraryManagementSystem {
                     break;
 
                     case 7: // View Reviews
-                    viewReviews(member);   
+                    viewReviews();   
                     break; 
     
                 case 8: // Logout
@@ -278,21 +278,22 @@ public class LibraryManagementSystem {
         }
     }
 
-    private static void viewReviews(Member member) {
-        List<Review> memberReviews = Review.getReviewsForMember(member);
-        StringBuilder reviewList = new StringBuilder("Your Reviews:\n");
-        if (memberReviews.isEmpty()) {
+    private static void viewReviews() {
+        List<Review> allReviews = Review.getReviews();
+        StringBuilder reviewList = new StringBuilder("All Reviews:\n");
+        if (allReviews.isEmpty()) {
             reviewList.append("No reviews found.");
         } else {
-            for (Review review : memberReviews) {
+            for (Review review : allReviews) {
                 reviewList.append("Review ID: ").append(review.getReviewID()).append("\n");
+                reviewList.append("Member: ").append(review.getMember().getName()).append("\n");
                 reviewList.append("Book: ").append(review.getBook().getTitle()).append("\n");
                 reviewList.append("Rating: ").append(review.getRating()).append("\n");
                 reviewList.append("Comment: ").append(review.getComment()).append("\n\n");
             }
         }
         JOptionPane.showMessageDialog(null, reviewList.toString());
-    }
+    }    
 
     private static Book findBookByID(String bookID) {
         for (Book book : library.getBooks()) {
