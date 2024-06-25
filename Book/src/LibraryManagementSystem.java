@@ -252,6 +252,53 @@ public class LibraryManagementSystem {
                     String comment = JOptionPane.showInputDialog("Enter comment:");
                     reviewBook(bookID, rating, comment);
                     break;*/
+                    
+
+// Assuming this code is inside a method or a class where JOptionPane can be used
+case 4: // Review Book
+    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
+    boolean reviewAdded = false; // Flag to track if a review was added
+    Book matchedBook = null; // Variable to store the matched book
+    int rating = 0; // Initialize rating variable
+    String comment = ""; // Initialize comment variable
+    
+    // Loop through each book in the library
+    for (Book book : library.getBooks()) {
+        if (book.getIsbn().endsWith(bookID)) {
+            matchedBook = book; // Store the matched book
+            try {
+                // Prompt user for rating
+                rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                // Prompt user for comment
+                comment = JOptionPane.showInputDialog("Enter comment:");
+                
+                // Add the review
+                Review.addReview(member, book, rating, comment);
+                
+                // Set flag indicating a review was added
+                reviewAdded = true;
+                break; // Exit loop after adding a review for the matched book
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid rating format. Please enter a number between 1 and 5.");
+                // Optionally handle this exception as per your application's requirements
+            }
+        }
+    }
+
+    // If a review was added, display the review details using JOptionPane
+    if (reviewAdded && matchedBook != null) {
+        StringBuilder message = new StringBuilder();
+        message.append("Review added successfully:\n");
+        message.append("Book ID: ").append(bookID).append("\n");
+        message.append("Rating: ").append(rating).append("\n");
+        message.append("Comment: ").append(comment).append("\n");
+
+        JOptionPane.showMessageDialog(null, message.toString());
+    } else {
+        JOptionPane.showMessageDialog(null, "No book found with the specified ID: " + bookID);
+    }
+    break;
+                
                 case 5: // View Library Card
                 viewLibraryCard(member);
                     break;
@@ -265,6 +312,8 @@ public class LibraryManagementSystem {
             }
         }
     }
+
+    
 
     public static void showBooksSelectionMenu() {
         String[] options = {"Genre with Books", "Publisher with Books", "Show List of Books"};
