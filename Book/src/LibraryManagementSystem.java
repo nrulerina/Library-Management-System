@@ -221,79 +221,53 @@ public class LibraryManagementSystem {
                     BorrowRecord.removeRecord(borrowID); // Remove from file
                     JOptionPane.showMessageDialog(null, "Book removed successfully!");
                     break;
-                /*case 4: // Review Book
-                    String bookID = JOptionPane.showInputDialog("Enter book ID to review:");
-                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                    String comment = JOptionPane.showInputDialog("Enter comment:");
-                    Review.addReview(member, findBookByID(bookID), rating, comment);
-
-                // Display the added review information
-                    System.out.println("Review added successfully:");
-                    System.out.println("Book ID: " + bookID);
-                    System.out.println("Rating: " + rating);
-                    System.out.println("Comment: " + comment);
-                    System.out.println();
-
-                // Return to member menu
-                    break;
                 /*case 2: // View Borrowed Books
                     member.showBorrowedBooks();
                     break;
                 case 3: // View Reservation Queue
                     showReservationQueue();
-                    break;
-                case 4: // Review Book
-                    bookID = JOptionPane.showInputDialog("Enter book ID to review:");
-                    int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                    String comment = JOptionPane.showInputDialog("Enter comment:");
-                    reviewBook(bookID, rating, comment);
                     break;*/
-                    
-
-// Assuming this code is inside a method or a class where JOptionPane can be used
-case 4: // Review Book
-    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
-    boolean reviewAdded = false; // Flag to track if a review was added
-    Book matchedBook = null; // Variable to store the matched book
-    int rating = 0; // Initialize rating variable
-    String comment = ""; // Initialize comment variable
+                case 4: // Review Book
+                    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
+                    boolean reviewAdded = false; // Flag to track if a review was added
+                     Book matchedBook = null; // Variable to store the matched book
+                    int rating = 0; // Initialize rating variable
+                    String comment = ""; // Initialize comment variable
     
-    // Loop through each book in the library
-    for (Book book : library.getBooks()) {
-        if (book.getIsbn().endsWith(bookID)) {
-            matchedBook = book; // Store the matched book
-            try {
-                // Prompt user for rating
-                rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                // Prompt user for comment
-                comment = JOptionPane.showInputDialog("Enter comment:");
+                    // Loop through each book in the library
+                    for (Book book : library.getBooks()) {
+                        if (book.getIsbn().endsWith(bookID)) {
+                            matchedBook = book; // Store the matched book
+                             try {
+                                // Prompt user for rating
+                                rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                                // Prompt user for comment
+                                comment = JOptionPane.showInputDialog("Enter comment:");
                 
-                // Add the review
-                Review.addReview(member, book, rating, comment);
-                
-                // Set flag indicating a review was added
-                reviewAdded = true;
-                break; // Exit loop after adding a review for the matched book
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid rating format. Please enter a number between 1 and 5.");
-                // Optionally handle this exception as per your application's requirements
-            }
-        }
-    }
+                                // Add the review
+                                Review.addReview(member, book, rating, comment);
+                                // Set flag indicating a review was added
+                                reviewAdded = true;
+                                break; // Exit loop after adding a review for the matched book
+                            } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, "Invalid rating format. Please enter a number between 1 and 5.");
+                            // Optionally handle this exception as per your application's requirements
+                        }
+                    }
+                }
+                            // If a review was added, display the review details using JOptionPane
+                            if (reviewAdded && matchedBook != null) {
+                                StringBuilder message = new StringBuilder();
+                                message.append("Review added successfully:\n");
+                                message.append("Book ID: ").append(bookID).append("\n");
+                                message.append("Rating: ").append(rating).append("\n");
+                                message.append("Comment: ").append(comment).append("\n");
 
-    // If a review was added, display the review details using JOptionPane
-    if (reviewAdded && matchedBook != null) {
-        StringBuilder message = new StringBuilder();
-        message.append("Review added successfully:\n");
-        message.append("Book ID: ").append(bookID).append("\n");
-        message.append("Rating: ").append(rating).append("\n");
-        message.append("Comment: ").append(comment).append("\n");
-
-        JOptionPane.showMessageDialog(null, message.toString());
-    } else {
-        JOptionPane.showMessageDialog(null, "No book found with the specified ID: " + bookID);
-    }
-    break;
+                                JOptionPane.showMessageDialog(null, message.toString());
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No book found with the specified ID: " + bookID);
+                            }
+                                break;
                 
                 case 5: // View Library Card
                 viewLibraryCard(member);
