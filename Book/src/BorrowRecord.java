@@ -11,6 +11,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class BorrowRecord {
     private static int borrowCount;
     private String borrowID;
@@ -112,16 +114,26 @@ public class BorrowRecord {
     }
 
 
-    public void removeRecord(String borrowID) {
+    public static void removeRecord(String borrowID) {
         try {
             Path path = Paths.get("borrowrecords.txt");
             List<String> lines = Files.readAllLines(path);
             List<String> updatedLines = new ArrayList<>();
 
             for (String line : lines) {
-                if (!line.contains(borrowID)) {
-                    updatedLines.add(line);
+                if (line.contains(borrowID)) {
+                    // Show confirmation dialog
+                    int response = JOptionPane.showConfirmDialog(null, 
+                        "Confirm Remove?\n" + line, 
+                        "Confirm Removal", 
+                        JOptionPane.YES_NO_OPTION);
+                    
+                    if (response == JOptionPane.YES_OPTION) {
+                        // Skip adding this line to updatedLines, effectively removing it
+                        continue;
+                    }
                 }
+                updatedLines.add(line);
             }
 
             Files.write(path, updatedLines);
