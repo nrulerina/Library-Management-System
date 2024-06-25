@@ -1,7 +1,9 @@
 import java.util.ArrayList;
-import java.util.Date;  
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.swing.JOptionPane;
 
 public class Review {
     private String reviewID;
@@ -22,7 +24,6 @@ public class Review {
         this.reviewDate = reviewDate;
     }
 
-    // Getters and setters
     public String getReviewID() {
         return reviewID;
     }
@@ -59,12 +60,32 @@ public class Review {
         return reviews;
     }
 
-    // Add review for a specific book
     public static void addReview(Member member, Book book, int rating, String comment) {
-        String reviewID = "R-" + UUID.randomUUID().toString().substring(0, 4); // Generate review ID
-        Date reviewDate = new Date(); // Use current date/time for review date
+        String reviewID = "R-" + UUID.randomUUID().toString().substring(0, 4);
+        Date reviewDate = new Date();
         Review review = new Review(reviewID, book, member, rating, comment, reviewDate);
         reviews.add(review);
+    }
+
+    public static void editReview(String reviewID, int newRating, String newComment) {
+        Review review = findReviewByID(reviewID);
+        if (review != null) {
+            review.setRating(newRating);
+            review.setComment(newComment);
+            JOptionPane.showMessageDialog(null, "Review edited successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Review not found.");
+        }
+    }
+
+    public static void deleteReview(String reviewID) {
+        Review review = findReviewByID(reviewID);
+        if (review != null) {
+            reviews.remove(review);
+            JOptionPane.showMessageDialog(null, "Review deleted successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Review not found.");
+        }
     }
 
     public static Review findReviewByID(String reviewID) {
@@ -73,30 +94,16 @@ public class Review {
                 return review;
             }
         }
-        return null; // Review not found
+        return null;
     }
 
-    // Method to edit a review
-    public static void editReview(String reviewID, int newRating, String newComment) {
-        Review review = findReviewByID(reviewID);
-        if (review != null) {
-            review.setRating(newRating);
-            review.setComment(newComment);
-            System.out.println("Review updated successfully:");
-            System.out.println(review); // Optionally, print the updated review
-        } else {
-            System.out.println("Review not found.");
+    public static List<Review> getReviewsForMember(Member member) {
+        List<Review> memberReviews = new ArrayList<>();
+        for (Review review : reviews) {
+            if (review.getMember().equals(member)) {
+                memberReviews.add(review);
+            }
         }
-    }
-
-    // Method to delete a review
-    public static void deleteReview(String reviewID) {
-        Review review = findReviewByID(reviewID);
-        if (review != null) {
-            reviews.remove(review);
-            System.out.println("Review deleted successfully.");
-        } else {
-            System.out.println("Review not found.");
-        }
+        return memberReviews;
     }
 }

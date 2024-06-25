@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -202,7 +203,7 @@ public class LibraryManagementSystem {
 
     public static void memberMenu(Member member) {
         while (true) {
-            String[] options = {"Borrow Book", "Return Book", "View Borrowed Books", "View Reservation Queue", "Review Book", "View Library Card", "Show List of Books", "Logout"};
+            String[] options = {"Borrow Book", "Return Book", "View Borrowed Books", "View Reservation Queue", "Review Book", "View Library Card", "Show List of Books", "View Reviews", "Logout"};
             int choice = JOptionPane.showOptionDialog(null, "Member Menu:", "Library Management System", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
     
             switch (choice) {
@@ -252,48 +253,9 @@ public class LibraryManagementSystem {
 
 // Assuming this code is inside a method or a class where JOptionPane can be used
 case 4: // Review Book
-    bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
-    boolean reviewAdded = false; // Flag to track if a review was added
-    Book matchedBook = null; // Variable to store the matched book
-    int rating = 0; // Initialize rating variable
-    String comment = ""; // Initialize comment variable
-    
-    // Loop through each book in the library
-    for (Book book : library.getBooks()) {
-        if (book.getIsbn().endsWith(bookID)) {
-            matchedBook = book; // Store the matched book
-            try {
-                // Prompt user for rating
-                rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
-                // Prompt user for comment
-                comment = JOptionPane.showInputDialog("Enter comment:");
+                    reviewBook(member);
+                    break;
                 
-                // Add the review
-                Review.addReview(member, book, rating, comment);
-                
-                // Set flag indicating a review was added
-                reviewAdded = true;
-                break; // Exit loop after adding a review for the matched book
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid rating format. Please enter a number between 1 and 5.");
-                // Optionally handle this exception as per your application's requirements
-            }
-        }
-    }
-
-    // If a review was added, display the review details using JOptionPane
-    if (reviewAdded && matchedBook != null) {
-        StringBuilder message = new StringBuilder();
-        message.append("Review added successfully:\n");
-        message.append("Book ID: ").append(bookID).append("\n");
-        message.append("Rating: ").append(rating).append("\n");
-        message.append("Comment: ").append(comment).append("\n");
-
-        JOptionPane.showMessageDialog(null, message.toString());
-    } else {
-        JOptionPane.showMessageDialog(null, "No book found with the specified ID: " + bookID);
-    }
-    break;
                 
                 case 5: // View Library Card
                 viewLibraryCard(member);
@@ -301,15 +263,65 @@ case 4: // Review Book
                 case 6:  //Show List of Books
                     showBooksSelectionMenu();
                     break;
+
+                    case 7: // View Reviews
+                    viewReviews(member);    
+                    break;
     
-                case 7: // Logout
+                case 8: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
                     return; 
             }
         }
     }
 
-    
+     private static void reviewBook(Member member) {
+        String bookID = JOptionPane.showInputDialog("Enter the last 5 digits of the book ISBN to review:");
+        Book book = findBookByID(bookID);
+        if (book != null) {
+            try {
+                int rating = Integer.parseInt(JOptionPane.showInputDialog("Enter rating (1-5):"));
+                if (rating < 1 || rating > 5) {
+                    throw new NumberFormatException(); // Ensure rating is between 1 and 5
+                }
+                String comment = JOptionPane.showInputDialog("Enter comment:");
+
+                // Add the review
+                Review.addReview(member, book, rating, comment);
+                JOptionPane.showMessageDialog(null, "Review added successfully.");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid rating format. Please enter a number between 1 and 5.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Book not found.");
+        }
+    }
+
+    private static void viewReviews(Member member) {
+        List<Review> memberReviews = Review.getReviewsForMember(member);
+        StringBuilder reviewList = new StringBuilder("Your Reviews:\n");
+        if (memberReviews.isEmpty()) {
+            reviewList.append("No reviews found.");
+        } else {
+            for (Review review : memberReviews) {
+                reviewList.append("Review ID: ").append(review.getReviewID()).append("\n");
+                reviewList.append("Book: ").append(review.getBook().getTitle()).append("\n");
+                reviewList.append("Rating: ").append(review.getRating()).append("\n");
+                reviewList.append("Comment: ").append(review.getComment()).append("\n\n");
+            }
+        }
+        JOptionPane.showMessageDialog(null, reviewList.toString());
+    }
+
+    private static Book findBookByID(String bookID) {
+        for (Book book : library.getBooks()) {
+            if (book.getIsbn().endsWith(bookID)) {
+                return book;
+            }
+        }
+        return null; // Book not found
+    }
+
 
     public static void showBooksSelectionMenu() {
         String[] options = {"Genre with Books", "Publisher with Books", "Show List of Books"};
