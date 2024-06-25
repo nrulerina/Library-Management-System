@@ -1,12 +1,11 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+
 
 public class Library {
     private static Library instance; // Singleton instance
@@ -18,6 +17,8 @@ public class Library {
     private ArrayList<User> users;
     private ArrayList<Member> members;
     private ArrayList<Admin> admins;
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     public Library(String name, String address) {
         this.name = name;
@@ -50,6 +51,7 @@ public class Library {
         }
         return null; // If no member is found
     }
+
     // Add User
     public void addUser(User user) {
         users.add(user);
@@ -186,7 +188,7 @@ public void showListOfBooks() {
               .append("Author: ").append(book.getAuthor()).append("\n")
               .append("ISBN: ").append(book.getIsbn()).append("\n")
               .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
-              .append("Published Date: ").append(book.getPublishedDate()).append("\n")
+              .append("Published Date: ").append(dateFormat.format(book.getPublishedDate())).append("\n")
               .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
               .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
         }
@@ -357,4 +359,5 @@ private static void updateGenreFile(Genre genre) {
     public ArrayList<Genre> getGenres() {
         return genres;
     }
+
 }

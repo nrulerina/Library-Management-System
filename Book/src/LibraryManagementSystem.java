@@ -8,12 +8,13 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.text.SimpleDateFormat;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class LibraryManagementSystem {
     private static Library library;
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static void main(String[] args) {
         // Initialize the library
@@ -265,51 +266,61 @@ public class LibraryManagementSystem {
         }
     }
 
-    private static void showBooksSelectionMenu() {
-        String[] options = {"View by Genre", "View by Publisher", "Show All Books"};
-        int choice = JOptionPane.showOptionDialog(null, "Select an option:", "Show List of Books", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    public static void showBooksSelectionMenu() {
+        String[] options = {"Genre with Books", "Publisher with Books", "Show List of Books"};
+        int choice = JOptionPane.showOptionDialog(null, "Select an option", "Book Selection",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
     
         switch (choice) {
-            case 0:
+            case 0:  // Genre with Books
                 viewBooksByGenre();
-                return;
-            case 1:
+                showBooksSelectionMenu();
+                break;
+            case 1:  // Publisher with Books
                 viewBooksByPublisher();
-                return;
-            case 2:
-                library.showListOfBooks(); // Assuming library has this method
-                return;
+                showBooksSelectionMenu();
+                break;
+            case 2:  // Show List of Books
+                library.showListOfBooks(); // Assuming admin has this method
+                showBooksSelectionMenu();
+                break;
+            default:
+                break;
         }
     }
-
     
 
     private static void viewBooksByGenre() {
-        JComboBox<String> genreComboBox = new JComboBox<>();
-        for (Genre genre : library.getGenres()) {
-            genreComboBox.addItem(genre.getName());
-        }
+        while (true) {
+            JComboBox<String> genreComboBox = new JComboBox<>();
+            for (Genre genre : library.getGenres()) {
+                genreComboBox.addItem(genre.getName());
+            }
     
-        int option = JOptionPane.showOptionDialog(null, genreComboBox, 
-                    "Select Genre", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+            int option = JOptionPane.showOptionDialog(null, genreComboBox,
+                    "Select Genre", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, null, null);
     
-        if (option != JOptionPane.CLOSED_OPTION) {
+            if (option == JOptionPane.CLOSED_OPTION) {
+                return; // If user cancels, return from method
+            }
+    
             String selectedGenre = (String) genreComboBox.getSelectedItem();
             StringBuilder sb = new StringBuilder();
             boolean foundBooks = false;
             for (Book book : library.getBooks()) {
                 if (book.getGenre().getName().equals(selectedGenre)) {
                     sb.append("Title: ").append(book.getTitle()).append("\n")
-                      .append("Author: ").append(book.getAuthor()).append("\n")
-                      .append("ISBN: ").append(book.getIsbn()).append("\n")
-                      .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
-                      .append("Published Date: ").append(book.getPublishedDate()).append("\n")
-                      .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
-                      .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
+                            .append("Author: ").append(book.getAuthor()).append("\n")
+                            .append("ISBN: ").append(book.getIsbn()).append("\n")
+                            .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
+                            .append("Published Date: ").append(dateFormat.format(book.getPublishedDate())).append("\n")
+                            .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
+                            .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
                     foundBooks = true;
                 }
             }
+    
             if (!foundBooks) {
                 JOptionPane.showMessageDialog(null, "No books recorded for genre: " + selectedGenre, "No Books", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -319,31 +330,36 @@ public class LibraryManagementSystem {
     }
     
     private static void viewBooksByPublisher() {
-        JComboBox<String> publisherComboBox = new JComboBox<>();
-        for (Publisher publisher : library.getPublishers()) {
-            publisherComboBox.addItem(publisher.getName());
-        }
+        while (true) {
+            JComboBox<String> publisherComboBox = new JComboBox<>();
+            for (Publisher publisher : library.getPublishers()) {
+                publisherComboBox.addItem(publisher.getName());
+            }
     
-        int option = JOptionPane.showOptionDialog(null, publisherComboBox, 
-                    "Select Publisher", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+            int option = JOptionPane.showOptionDialog(null, publisherComboBox,
+                    "Select Publisher", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, null, null);
     
-        if (option != JOptionPane.CLOSED_OPTION) {
+            if (option == JOptionPane.CLOSED_OPTION) {
+                return; // If user cancels, return from method
+            }
+    
             String selectedPublisher = (String) publisherComboBox.getSelectedItem();
             StringBuilder sb = new StringBuilder();
             boolean foundBooks = false;
             for (Book book : library.getBooks()) {
                 if (book.getPublisher().getName().equals(selectedPublisher)) {
                     sb.append("Title: ").append(book.getTitle()).append("\n")
-                      .append("Author: ").append(book.getAuthor()).append("\n")
-                      .append("ISBN: ").append(book.getIsbn()).append("\n")
-                      .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
-                      .append("Published Date: ").append(book.getPublishedDate()).append("\n")
-                      .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
-                      .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
+                            .append("Author: ").append(book.getAuthor()).append("\n")
+                            .append("ISBN: ").append(book.getIsbn()).append("\n")
+                            .append("Publisher: ").append(book.getPublisher().getName()).append("\n")
+                            .append("Published Date: ").append(dateFormat.format(book.getPublishedDate())).append("\n")
+                            .append("Copies Available: ").append(book.getCopiesAvailable()).append("\n")
+                            .append("Genre: ").append(book.getGenre().getName()).append("\n\n");
                     foundBooks = true;
                 }
             }
+    
             if (!foundBooks) {
                 JOptionPane.showMessageDialog(null, "No books recorded for publisher: " + selectedPublisher, "No Books", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -379,7 +395,7 @@ public class LibraryManagementSystem {
                     addBook(admin);
                     break;
                 case 1:
-                    removeBook(admin);
+                    removeBooks(admin);
                     break;
                 case 2:
                     manageMember(admin);
@@ -388,8 +404,8 @@ public class LibraryManagementSystem {
                     addAnnouncement(admin);
                     break;
                 case 4:
-                    library.showListOfBooks(); // Assuming admin has this method
-                    break;
+                    showBooksSelectionMenu();
+                    break;                    
                 case 5:
                     library.showListOfMembers(); // Assuming admin has this method
                     break;
@@ -429,7 +445,14 @@ public class LibraryManagementSystem {
                     continue;
                 }
     
-                Date publishedDate = new Date(); // Set default published date to current date
+                String publishedDateString = JOptionPane.showInputDialog("Enter book published date (YYYY-MM-DD):");
+        Date publishedDate = null;
+        try {
+            publishedDate = dateFormat.parse(publishedDateString);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Invalid date format. Please use YYYY-MM-DD.");
+            return;
+        }
                 int copiesAvailable = Integer.parseInt(JOptionPane.showInputDialog("Enter copies available:"));
     
                 // Load publishers into JComboBox
@@ -545,17 +568,56 @@ public static void updateGenreFile(Genre genre) {
     }
 }
 
-    private static void removeBook(Admin admin) {
-        String bookTitle = JOptionPane.showInputDialog("Enter book title to remove:");
-        Book bookToRemove = findBookByTitle(bookTitle);
+public static void removeBooks(Admin admin) {
+    String isbnSuffix = JOptionPane.showInputDialog("Enter the last 5 digits of the book's ISBN to remove:");
+    Book bookToRemove = findBookByIsbnSuffix(isbnSuffix);
 
-        if (bookToRemove != null) {
-            library.removeBook(admin, bookToRemove);
+    if (bookToRemove != null) {
+        if (admin != null) {
+            library.removeBook(admin,bookToRemove);
+            updateBooksFile();
             JOptionPane.showMessageDialog(null, "Book removed successfully.");
         } else {
-            JOptionPane.showMessageDialog(null, "Book with title '" + bookTitle + "' not found.");
+            JOptionPane.showMessageDialog(null, "Only admin can remove books!");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Book with ISBN ending '" + isbnSuffix + "' not found.");
+    }
+}
+
+private static Book findBookByIsbnSuffix(String isbnSuffix) {
+    for (Book book : library.getBooks()) {
+        if (book.getIsbn().endsWith(isbnSuffix)) {
+            return book;
         }
     }
+    return null;
+}
+
+private static void updateBooksFile() {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))) {
+        for (Book book : library.getBooks()) {
+            writer.write("Title: " + book.getTitle());
+            writer.newLine();
+            writer.write("Author: " + book.getAuthor());
+            writer.newLine();
+            writer.write("ISBN: " + book.getIsbn());
+            writer.newLine();
+            writer.write("Publisher: " + book.getPublisher().getName());
+            writer.newLine();
+            writer.write("Published Date: " + book.getPublishedDate());
+            writer.newLine();
+            writer.write("Copies Available: " + book.getCopiesAvailable());
+            writer.newLine();
+            writer.write("Genre: " + book.getGenre().getName());
+            writer.newLine();
+            writer.newLine(); // Add a blank line to separate books
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error updating books file: " + e.getMessage());
+    }
+}
+
 
     private static Book findBookByTitle(String title) {
         for (Book book : library.getBooks()) {
@@ -566,7 +628,7 @@ public static void updateGenreFile(Genre genre) {
         return null;
     }
 
-
+   
     private static void manageMember(Admin admin) {
         String memberId = JOptionPane.showInputDialog("Enter member ID to manage:");
         // Placeholder for managing members

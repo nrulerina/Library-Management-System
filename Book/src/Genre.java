@@ -33,6 +33,4 @@ class Genre {
         reader.close();
         return genres;
     }
-
-    
 }
