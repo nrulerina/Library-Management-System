@@ -58,12 +58,6 @@ public class Member extends User {
         return super.login(username, password);
     }
 
-    public void borrowBook(Book book) {
-        // Implement borrow book functionality
-        // Example: update member's borrowing history or decrement available copies
-        System.out.println(getName() + " borrowed book: " + book.getTitle());
-    }
-
     public void returnBook(Book book) {
         // Implement return book functionality
         // Example: update member's borrowing history or increment available copies

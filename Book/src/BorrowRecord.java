@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+//import java.util.*;
 
 public class BorrowRecord {
     private String borrowID;
@@ -99,12 +99,12 @@ public class BorrowRecord {
                 getFine();
     }
 
-    public void saveToFile(String filename) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+    public void saveToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowrecords.txt", true))) {
             writer.write(toFileFormat());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("Error saving borrow record: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
