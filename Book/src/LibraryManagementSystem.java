@@ -223,7 +223,7 @@ public class LibraryManagementSystem {
                     JOptionPane.showMessageDialog(null, "Book removed successfully!");
                     break;
                
-case 4: // Review Book
+        case 4: // Review Book
                     reviewBook(member);
                     break;
                 
@@ -236,7 +236,8 @@ case 4: // Review Book
                     break;
 
                     case 7: // View Reviews
-                    viewReviews(member);    
+                    viewReviews(member);   
+                    break; 
     
                 case 8: // Logout
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
