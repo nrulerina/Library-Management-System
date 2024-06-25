@@ -1,12 +1,18 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 //import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BorrowRecord {
+    private static int borrowCount;
     private String borrowID;
     private Member member;
     private Book book;
@@ -19,15 +25,11 @@ public class BorrowRecord {
         this.book = b;
         this.borrowDateTime = bDT;
         this.returnDateTime = bDT.plusDays(7);
-        this.borrowID = generateBorrowID(bDT);
-        //brList = new ArrayList<>();
+        this.borrowID = "B"+ borrowCount++;
     }
 
-    private String generateBorrowID(ZonedDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formattedDate = dateTime.format(formatter);
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
-        return "B-" + member.getMemberID() + isbnPart + formattedDate;
+    public String getBorrowID() {
+        return borrowID;
     }
 
     public Book getBook() {
@@ -72,14 +74,35 @@ public class BorrowRecord {
         }
     }
 
+    public void saveToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowrecords.txt", true))) {
+            writer.write(toFileFormat());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String toFileFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        return getBorrowID() + "," +
+                member.getMemberID() + "," +
+                isbnPart + "," +
+                borrowDateTime.format(formatter) + "," +
+                returnDateTime.format(formatter) + "," +
+                getFine();
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
         String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
         String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        borrowID = "B"+borrowCount;
 
         return "\nBorrowing Details:\n" +
-                "\nBorrowID: " + borrowID +
+                "\nBorrowID: " + getBorrowID() +
                 "\nMemberID: " + member.getMemberID() +
                 "\nBook ID: " + isbnPart +
                 "\nBorrow Date & Time: " + borrowDateTime.format(formatter) +
@@ -88,21 +111,20 @@ public class BorrowRecord {
                 "\nFine: " + getFine();
     }
 
-    public String toFileFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
-        return borrowID + "," +
-                member.getMemberID() + "," +
-                isbnPart + "," +
-                borrowDateTime.format(formatter) + "," +
-                returnDateTime.format(formatter) + "," +
-                getFine();
-    }
 
-    public void saveToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowrecords.txt", true))) {
-            writer.write(toFileFormat());
-            writer.newLine();
+    public void removeRecord(String borrowID) {
+        try {
+            Path path = Paths.get("borrowrecords.txt");
+            List<String> lines = Files.readAllLines(path);
+            List<String> updatedLines = new ArrayList<>();
+
+            for (String line : lines) {
+                if (!line.contains(borrowID)) {
+                    updatedLines.add(line);
+                }
+            }
+
+            Files.write(path, updatedLines);
         } catch (IOException e) {
             e.printStackTrace();
         }

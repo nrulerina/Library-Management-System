@@ -42,6 +42,14 @@ public class Reminder {
         brList.add(br);
     }
 
+    public void removeBorrowRecord(BorrowRecord br) {
+        brList.remove(br);
+    }
+
+    public ArrayList<BorrowRecord> getBorrowRecords() {
+        return brList;
+    }
+
     public void addReservationRecord(ReservationRecord rr) {
         rrList.add(rr);
     }
