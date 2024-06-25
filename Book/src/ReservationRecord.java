@@ -16,7 +16,9 @@ public class ReservationRecord {
 
     private String generateReserveID(ZonedDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return "R-"+member.getMemberID()+ book.getIsbn() + dateTime.format(formatter);
+        String formattedDate = dateTime.format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
+        return "R-" + member.getMemberID() + isbnPart + formattedDate;
     }
 
     public Book getBook() {
@@ -47,11 +49,12 @@ public class ReservationRecord {
     public String toString(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
         String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(0, 5) : book.getIsbn();
 
          return "\nReservation Details:\n" +
                "\nReserveID: " + reserveID +
                "\nMemberID: " + member.getMemberID() +
-               "\nBookID: " + book.getIsbn() +
+               "\nBookID: " + isbnPart +
                "\nReserve Date & Time: " + reserveDateTime.format(formatter) +
                "\nCurrent Date & Time: " + currentDateTimeFormatted ;
     }
