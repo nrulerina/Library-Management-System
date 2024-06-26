@@ -144,4 +144,19 @@ public class BorrowRecord {
             e.printStackTrace();
         }
     }
+
+    public String reminder() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        String currentDateTimeFormatted = ZonedDateTime.now().format(formatter);
+        String isbnPart = book.getIsbn().length() > 5 ? book.getIsbn().substring(book.getIsbn().length() - 5) : book.getIsbn();
+    
+        return 
+                "\nBorrowID: " + getBorrowID() +
+                "\nMemberID: " + member.getMemberID() +
+                "\nBook ID: " + isbnPart +
+                "\nBorrow Date & Time: " + borrowDateTime.format(formatter) +
+                "\nReturn Before: " + returnDateTime.format(formatter) +
+                "\nCurrent Date & Time: " + currentDateTimeFormatted +
+                "\nFine: " + getFine();
+    }
 }

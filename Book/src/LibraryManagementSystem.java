@@ -225,9 +225,9 @@ public class LibraryManagementSystem {
                         } else {
                             StringBuilder sb = new StringBuilder();
                             for (BorrowRecord br : brList) {
-                                sb.append(br).append("\n");
+                                sb.append(br.reminder()).append("\n");
                             }
-                            JOptionPane.showMessageDialog(null, sb.toString(), "Borrow Records", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, sb.toString(), "Reminder To Return Book Before Due Date:", JOptionPane.INFORMATION_MESSAGE);
                         }
                     break;       
                 case 4: // Review Book
