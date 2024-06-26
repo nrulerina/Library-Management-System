@@ -481,7 +481,7 @@ public class LibraryManagementSystem {
         boolean logout = false;
 
         while (!logout) {
-            String[] options = {"Add Book", "Remove Book", "Manage Member", "Add Announcement", "Show List of Books",
+            String[] options = {"Add Book", "Remove Book", "Add Announcement", "Show List of Books",
                     "Show List of Members", "Logout"};
             int choice = JOptionPane.showOptionDialog(null, "Admin Menu:", "Library Management System",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -493,19 +493,17 @@ public class LibraryManagementSystem {
                 case 1:
                     removeBooks(admin);
                     break;
+            
                 case 2:
-                    manageMember(admin);
-                    break;
-                case 3:
                     addAnnouncement(admin);
                     break;
-                case 4:
+                case 3:
                     showBooksSelectionMenu();
                     break;                    
-                case 5:
+                case 4:
                     library.showListOfMembers(); // Assuming admin has this method
                     break;
-                case 6:
+                case 5:
                     JOptionPane.showMessageDialog(null, "Logged out successfully.");
                     logout = true;
                     break;
@@ -726,12 +724,7 @@ private static void updateBooksFile() {
     }
 
    
-    private static void manageMember(Admin admin) {
-        String memberId = JOptionPane.showInputDialog("Enter member ID to manage:");
-        // Placeholder for managing members
-        // Implement functionality as needed
-        JOptionPane.showMessageDialog(null, "Feature under construction.");
-    }
+  
 
     private static void addAnnouncement(Admin admin) {
         String message = JOptionPane.showInputDialog("Enter announcement message:");
