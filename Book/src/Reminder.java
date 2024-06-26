@@ -1,4 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Reminder {
@@ -47,12 +51,54 @@ public class Reminder {
     }
 
     public ArrayList<BorrowRecord> getBorrowRecords() {
+        ArrayList<BorrowRecord> brList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrowrecords.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 6) {
+                    String borrowID = parts[0];
+                    String memberID = parts[1];
+                    String isbnPart = parts[2];
+                    LocalDateTime borrowDateTime = LocalDateTime.parse(parts[3], formatter);
+                    LocalDateTime returnDateTime = LocalDateTime.parse(parts[4], formatter);
+                    ZonedDateTime borrowZonedDateTime = borrowDateTime.atZone(defaultZoneId);
+                    ZonedDateTime returnZonedDateTime = returnDateTime.atZone(defaultZoneId);
+                    double fine = Double.parseDouble(parts[5]);
+    
+                    Library library = new Library();
+                    Member member = library.findMemberById(memberID);
+                    Book book = library.findBookByIsbnPart(isbnPart);
+    
+                    if (member != null && book != null) {
+                        BorrowRecord br = new BorrowRecord(member, book, borrowZonedDateTime);
+                        br.setReturnDateTime(returnZonedDateTime);
+                        brList.add(br);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return brList;
     }
 
-    public void addReservationRecord(ReservationRecord rr) {
-        rrList.add(rr);
+     public static ArrayList<ReservationRecord> getReserveRecords() {
+        ArrayList<ReservationRecord> rrList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("reserverecords.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                rrList.add(new ReservationRecord(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rrList;
     }
+
 }
 
 

@@ -14,6 +14,12 @@ public class Member extends User {
         this.libraryCard = new LibraryCard(this, new Date(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000), new Date());
     }
 
+    public Member(String memberID, String name) {
+        super(memberID, name);
+        this.memberID = memberID;
+        this.name = name;
+    }
+
     public LibraryCard getLibraryCard() {
         return libraryCard;
     }

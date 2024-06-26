@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 
@@ -19,6 +23,7 @@ public class Library {
     private ArrayList<Admin> admins;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public Library() {}
 
     public Library(String name, String address) {
         this.name = name;
@@ -360,4 +365,50 @@ private static void updateGenreFile(Genre genre) {
         return genres;
     }
 
+    public Member findMemberById(String memberID) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("Read line: " + line); // Debugging: Print the line read
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    System.out.println("Parsed Member ID: " + parts[9]); // Debugging: Print the parsed member ID
+                    if (parts[9].trim().equals(memberID)) {
+                        System.out.println("Match found: " + parts[9]); // Debugging: Print if a match is found
+                        return new Member(parts[9].trim(), parts[1].trim()); // Using simplified constructor
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("No match found for Member ID: " + memberID); // Debugging: Print if no match is found
+        return null;
+    }
+    
+    public Book findBookByIsbnPart(String isbnPart) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
+            String line;
+            String title = null;
+            String isbn = null;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Title:")) {
+                    title = line.substring("Title:".length()).trim();
+                } else if (line.startsWith("ISBN:")) {
+                    isbn = line.substring("ISBN:".length()).trim();
+                    // Check if this book's ISBN ends with the provided isbnPart
+                    if (isbn.endsWith(isbnPart)) {
+                        return new Book(isbn, title);
+                    }
+                    // Reset title and isbn for the next book
+                    title = null;
+                    isbn = null;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if no matching book is found
+    }
 }

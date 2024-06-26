@@ -20,6 +20,16 @@ public class ReservationRecord {
         this.reserveID = "R"+ ++reserveCount;
     }
 
+    public ReservationRecord(String line) {
+        String[] parts = line.split(",");
+        this.reserveID = parts[0];
+        String memberID = parts[1]; // Assuming a constructor in Member class that takes memberID
+        String bookID = parts[2]; // Assuming a constructor in Book class that takes ISBN or ID
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.reserveDateTime = ZonedDateTime.parse(parts[3], formatter);
+    }
+
+
     public String getReserveID() {
         return reserveID;
     }

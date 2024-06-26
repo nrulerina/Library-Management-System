@@ -22,6 +22,17 @@ public class BorrowRecord {
         this.borrowID = "B"+ ++borrowCount;
     }
 
+    public BorrowRecord(String line) {
+        String[] parts = line.split(",");
+        this.borrowID = parts[0];
+        String memberID = parts[1]; 
+        String bookID = parts[2];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.borrowDateTime = ZonedDateTime.parse(parts[3], formatter);
+        this.returnDateTime = ZonedDateTime.parse(parts[4], formatter);
+        double fine = Double.parseDouble(parts[5]);
+    }
+
     public String getBorrowID() {
         return borrowID;
     }

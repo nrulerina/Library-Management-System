@@ -21,6 +21,11 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
+    public User(String memberID, String name) {
+        this.memberID = memberID;
+        this.name = name;
+    }
+
     // Getters and Setters for all fields
 
     public String getName() {

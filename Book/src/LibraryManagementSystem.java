@@ -218,8 +218,18 @@ public class LibraryManagementSystem {
                     reserveBook(member);
                     break;
                 case 3: // View Reminder
-                    // viewReminder(member);
-                    break;
+                    Reminder reminder = new Reminder(member);
+                        ArrayList<BorrowRecord> brList = reminder.getBorrowRecords();
+                        if (brList.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No borrow records found.", "Borrow Records", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            StringBuilder sb = new StringBuilder();
+                            for (BorrowRecord br : brList) {
+                                sb.append(br).append("\n");
+                            }
+                            JOptionPane.showMessageDialog(null, sb.toString(), "Borrow Records", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    break;       
                 case 4: // Review Book
                     reviewBook(member);
                     break;
