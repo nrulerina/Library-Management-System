@@ -1,6 +1,5 @@
 # 📚 Library Management System Proposal
-
-![Library Animation](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExemZoZjB6NWgyMDY1NTB5OHVsMjc4N25nb2IxY3N3eHFwMWU2bmNkNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IKtqKotghPYbkoO1bk/giphy.gif)
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExemZoZjB6NWgyMDY1NTB5OHVsMjc4N25nb2IxY3N3eHFwMWU2bmNkNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IKtqKotghPYbkoO1bk/giphy.gif" width="200">
 
 ## 🏛 Department of Computer Science  
 **Faculty of Computing**  
